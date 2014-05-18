@@ -10,6 +10,13 @@ package com.nbempire.pp.service;
  */
 public interface ProductService {
 
-    Float findAveragePrice(String query);
-
+    /**
+     * Finds the average price for a specified query.
+     *
+     * @param query
+     *         The user query. The query should be as detailed as possible to find the best average price.
+     *
+     * @return The average price.
+     */
+    float findAveragePrice(String query);
 }

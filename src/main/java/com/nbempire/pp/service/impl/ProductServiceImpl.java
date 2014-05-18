@@ -13,7 +13,7 @@ import com.nbempire.pp.service.ProductService;
 public class ProductServiceImpl implements ProductService {
 
     @Override
-    public Float findAveragePrice(String query) {
-        return null;
+    public float findAveragePrice(String query) {
+        return 100000;
     }
 }
