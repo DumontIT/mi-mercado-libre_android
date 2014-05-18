@@ -1,7 +1,7 @@
 <component name="ProjectRunConfigurationManager">
   <configuration default="false" name="Precio Promedio" type="AndroidRunConfigurationType" factoryName="Android Application">
     <module name="Precio Promedio" />
-    <option name="ACTIVITY_CLASS" value="com.nbempire.pp.HomeActivity" />
+    <option name="ACTIVITY_CLASS" value="com.nbempire.pp.component.activity.HomeActivity" />
     <option name="MODE" value="specific_activity" />
     <option name="DEPLOY" value="true" />
     <option name="ARTIFACT_NAME" value="" />

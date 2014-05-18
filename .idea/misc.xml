@@ -4,17 +4,6 @@
     <entry_points version="2.0" />
   </component>
   <component name="IdProvider" IDEtalkID="68A496EC59A9CCFB947F69994D3320AD" />
-  <component name="JSLintConfiguration" html="true" css="true" json="true">
-    <option browser="true" />
-    <option indent="4" />
-    <option maxerr="50" />
-    <option maxlen="150" />
-    <option plusplus="true" />
-    <option predef="$,jQuery" />
-    <option sloppy="true" />
-    <option todo="true" />
-    <option vars="true" />
-  </component>
   <component name="ProjectDictionaryState">
     <dictionary name="nahuel" />
   </component>
@@ -88,82 +77,6 @@
   </component>
   <component name="ProjectRootManager" version="2" languageLevel="JDK_1_7" assert-keyword="true" jdk-15="true" project-jdk-name="Android API 7 Platform" project-jdk-type="Android SDK">
     <output url="file://$PROJECT_DIR$/out" />
-  </component>
-  <component name="SvnConfiguration" myUseAcceleration="nothing">
-    <configuration>$USER_HOME$/.subversion</configuration>
-  </component>
-  <component name="masterDetails">
-    <states>
-      <state key="Copyright.UI">
-        <settings>
-          <splitter-proportions>
-            <option name="proportions">
-              <list>
-                <option value="0.2" />
-              </list>
-            </option>
-          </splitter-proportions>
-        </settings>
-      </state>
-      <state key="GlobalLibrariesConfigurable.UI">
-        <settings>
-          <last-edited>robocode</last-edited>
-          <splitter-proportions>
-            <option name="proportions">
-              <list>
-                <option value="0.2" />
-              </list>
-            </option>
-          </splitter-proportions>
-        </settings>
-      </state>
-      <state key="JdkListConfigurable.UI">
-        <settings>
-          <last-edited>1.7</last-edited>
-          <splitter-proportions>
-            <option name="proportions">
-              <list>
-                <option value="0.2" />
-              </list>
-            </option>
-          </splitter-proportions>
-        </settings>
-      </state>
-      <state key="ProjectJDKs.UI">
-        <settings>
-          <last-edited>1.7</last-edited>
-          <splitter-proportions>
-            <option name="proportions">
-              <list>
-                <option value="0.2" />
-              </list>
-            </option>
-          </splitter-proportions>
-        </settings>
-      </state>
-      <state key="ProjectLibrariesConfigurable.UI">
-        <settings>
-          <splitter-proportions>
-            <option name="proportions">
-              <list>
-                <option value="0.2" />
-              </list>
-            </option>
-          </splitter-proportions>
-        </settings>
-      </state>
-      <state key="ScopeChooserConfigurable.UI">
-        <settings>
-          <splitter-proportions>
-            <option name="proportions">
-              <list>
-                <option value="0.2" />
-              </list>
-            </option>
-          </splitter-proportions>
-        </settings>
-      </state>
-    </states>
   </component>
 </project>
 
