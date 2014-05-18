@@ -19,6 +19,10 @@ public class HomeActivity extends Activity {
 
     private ProductService productService = new ProductServiceImpl();
 
+    EditText query;
+
+    TextView searchResult;
+
     /**
      * Called when the activity is first created.
      */
@@ -26,15 +30,17 @@ public class HomeActivity extends Activity {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.main);
+
+        query = (EditText) findViewById(R.id.homeSearchQuery);
+        searchResult = (TextView) findViewById(R.id.homeSearchResult);
     }
 
     public void searchAveragePrice(View view) {
-        EditText query = (EditText) findViewById(R.id.homeSearchQuery);
         Log.i(TAG, "Searching average price for: " + query.getText());
 
-        float averagePrice = productService.findAveragePrice(query.getText().toString());
+        searchResult.setVisibility(View.INVISIBLE);
 
-        TextView searchResult = (TextView) findViewById(R.id.homeSearchResult);
+        float averagePrice = productService.findAveragePrice(query.getText().toString());
 
         searchResult.setText(String.valueOf(averagePrice));
         searchResult.setVisibility(View.VISIBLE);
