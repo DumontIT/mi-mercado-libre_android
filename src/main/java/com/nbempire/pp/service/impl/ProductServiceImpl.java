@@ -1,6 +1,9 @@
 package com.nbempire.pp.service.impl;
 
+import com.nbempire.pp.domain.Article;
 import com.nbempire.pp.service.ProductService;
+
+import java.util.List;
 
 /**
  * TODO : Javadoc for
@@ -12,8 +15,12 @@ import com.nbempire.pp.service.ProductService;
  */
 public class ProductServiceImpl implements ProductService {
 
+    private ArticleService articleService = new ArticleServiceImpl();
+
     @Override
     public float findAveragePrice(String query) {
+        List<Article> articles = articleService.findArticlesMatching(query);
+
         return 100000;
     }
 }
