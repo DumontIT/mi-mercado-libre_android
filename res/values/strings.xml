@@ -1,4 +1,4 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="app_name">Precio Promedio</string>
+    <string name="app_name">Precio Promedio</string><string name="query_label">¿Qué estas buscando?</string><string name="search_button_label">Ver Precio Promedio</string>
 </resources>
