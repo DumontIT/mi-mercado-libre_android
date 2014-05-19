@@ -15,12 +15,17 @@ import java.util.List;
  */
 public class ProductServiceImpl implements ProductService {
 
-    private ArticleService articleService = new ArticleServiceImpl();
+    private ArticleService articleService = new ArticleServiceImpl(new ArticleDaoImplSpring());
 
     @Override
     public float findAveragePrice(String query) {
         List<Article> articles = articleService.findArticlesMatching(query);
 
-        return 100000;
+        float total = 0;
+        for (Article eachArticle : articles) {
+            total += eachArticle.getPrice();
+        }
+
+        return total / articles.size();
     }
 }

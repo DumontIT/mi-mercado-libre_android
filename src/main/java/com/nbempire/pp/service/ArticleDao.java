@@ -1,4 +1,4 @@
-package com.nbempire.pp.service.impl;
+package com.nbempire.pp.service;
 
 import com.nbempire.pp.domain.Article;
 
@@ -7,12 +7,12 @@ import java.util.List;
 /**
  * TODO : Javadoc for
  * <p/>
- * Created on 18/05/14, at 20:26.
+ * Created on 18/05/14, at 23:51.
  *
  * @author Nahuel Barrios <barrios.nahuel@gmail.com>.
  * @since 1.
  */
-public interface ArticleService {
+public interface ArticleDao {
 
     /**
      * Find articles in Mercado Libre by specifying a search query.
@@ -22,5 +22,5 @@ public interface ArticleService {
      *
      * @return A List of articles in ML.
      */
-    List<Article> findArticlesMatching(String query);
+    List<Article> findArticlesByQuery(String query);
 }

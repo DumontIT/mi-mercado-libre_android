@@ -10,4 +10,13 @@ package com.nbempire.pp.domain;
  */
 public class Article {
 
+    private Float price;
+
+    public Article(float price) {
+        this.price = price;
+    }
+
+    public Float getPrice() {
+        return price;
+    }
 }
