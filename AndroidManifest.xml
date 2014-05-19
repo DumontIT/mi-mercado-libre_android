@@ -8,6 +8,9 @@
         android:minSdkVersion="7"
         android:targetSdkVersion="19" />
 
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+    <uses-permission android:name="android.permission.INTERNET" />
+
     <application
         android:icon="@drawable/ic_len"
         android:label="@string/app_name"
