@@ -1,4 +1,4 @@
-pp
+Super ML
 ==
 
-Native Android app for those Mercado Libre's buyers/sellers that want to know the average price of a product in a few seconds without having to investigate the entire site
+Native Android app for those Mercado Libre's buyers/sellers that want to have an extremely personalized experience when searching items in Mercado Libre
