@@ -1,7 +1,7 @@
-package com.nbempire.pp.service.impl;
+package com.nbempire.pp.dao.impl;
 
+import com.nbempire.pp.dao.ArticleDao;
 import com.nbempire.pp.domain.Article;
-import com.nbempire.pp.service.ArticleDao;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -16,13 +16,20 @@ import java.util.List;
  */
 public class ArticleDaoImplSpring implements ArticleDao {
 
+    /**
+     * Tag for class' log.
+     */
+    private static final String TAG = "ArticleDaoImplSpring";
+
     @Override
     public List<Article> findArticlesByQuery(String query) {
         List<Article> articles = new ArrayList<>();
 
         articles.add(new Article(123));
+
         articles.add(new Article(43));
         articles.add(new Article(1251));
+
         articles.add(new Article(5744));
 
         return articles;

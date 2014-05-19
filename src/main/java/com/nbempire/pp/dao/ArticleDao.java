@@ -1,4 +1,4 @@
-package com.nbempire.pp.service;
+package com.nbempire.pp.dao;
 
 import com.nbempire.pp.domain.Article;
 

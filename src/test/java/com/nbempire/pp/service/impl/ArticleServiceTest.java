@@ -1,5 +1,6 @@
 package com.nbempire.pp.service.impl;
 
+import com.nbempire.pp.dao.impl.ArticleDaoImplSpring;
 import com.nbempire.pp.domain.Article;
 import org.junit.Assert;
 import org.junit.Test;

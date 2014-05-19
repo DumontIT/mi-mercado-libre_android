@@ -1,7 +1,7 @@
 package com.nbempire.pp.service.impl;
 
+import com.nbempire.pp.dao.ArticleDao;
 import com.nbempire.pp.domain.Article;
-import com.nbempire.pp.service.ArticleDao;
 
 import java.util.List;
 
