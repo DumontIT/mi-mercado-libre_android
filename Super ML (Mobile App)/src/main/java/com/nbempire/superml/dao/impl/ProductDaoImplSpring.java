@@ -4,6 +4,7 @@ import android.util.Log;
 import com.nbempire.superml.dao.ProductDao;
 import com.nbempire.superml.domain.Product;
 import org.springframework.http.converter.json.GsonHttpMessageConverter;
+import org.springframework.web.client.RestClientException;
 import org.springframework.web.client.RestTemplate;
 
 /**
@@ -31,10 +32,14 @@ public class ProductDaoImplSpring implements ProductDao {
         // Add the String message converter
         restTemplate.getMessageConverters().add(new GsonHttpMessageConverter());
 
-        // Make the HTTP GET request, marshaling the response to a String
-        Product result = restTemplate.getForObject(urlString, Product.class);
-
-        Log.i(TAG, "Obtained product: " + result.getAveragePrice());
+        Product result = null;
+        try {
+            // Make the HTTP GET request, marshaling the response to a String
+            result = restTemplate.getForObject(urlString, Product.class);
+            Log.i(TAG, "Obtained product: " + result.getAveragePrice());
+        } catch (RestClientException restClientException) {
+            Log.e(TAG, "An error occurred while searching for: \"" + query + "\"");
+        }
 
         return result;
     }

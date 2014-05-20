@@ -8,5 +8,7 @@
     <string name="query_label">O que você está procurando?</string>
     <string name="search_button_label">Ver Preço Médio</string>
     <string name="section_my_query_help_text">Seleccione uma categoria para encontrar as melhores publicações</string>
+    <string name="average_price_must_enter_query">Você deve digitar um produto</string>
+    <string name="error_generic">Ocorreu um erro, por favor, tente novamente mais tarde</string>
 
 </resources>

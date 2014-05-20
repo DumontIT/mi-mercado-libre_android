@@ -28,6 +28,7 @@ import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
 import com.nbempire.superml.R;
 import com.nbempire.superml.domain.Category;
 import com.nbempire.superml.domain.Product;
@@ -277,9 +278,13 @@ public class HomeActivity extends ActionBarActivity implements ActionBar.TabList
     public void searchAveragePrice(View view) {
         Log.i(TAG, "Searching product: " + query.getText());
 
-        updateViewsVisibility(View.INVISIBLE, new View[]{averagePrice, minimumPrice, maximumPrice, moneySymbol});
+        if (query.getText().toString().equals("")) {
+            Toast.makeText(this, R.string.average_price_must_enter_query, Toast.LENGTH_SHORT).show();
+        } else {
+            updateViewsVisibility(View.INVISIBLE, new View[]{averagePrice, minimumPrice, maximumPrice, moneySymbol});
 
-        new CallSuperMLApiAsyncTask().execute(query.getText().toString());
+            new CallSuperMLApiAsyncTask().execute(query.getText().toString());
+        }
     }
 
     private class CallSuperMLApiAsyncTask extends AsyncTask<String, Boolean, Product> {
@@ -291,11 +296,15 @@ public class HomeActivity extends ActionBarActivity implements ActionBar.TabList
 
         @Override
         protected void onPostExecute(Product result) {
-            averagePrice.setText(String.valueOf(result.getAveragePrice()));
-            minimumPrice.setText(String.valueOf(result.getMinimumPrice()));
-            maximumPrice.setText(String.valueOf(result.getMaximumPrice()));
+            if (result == null) {
+                Toast.makeText(averagePrice.getContext(), R.string.error_generic, Toast.LENGTH_SHORT).show();
+            } else {
+                averagePrice.setText(String.valueOf(result.getAveragePrice()));
+                minimumPrice.setText(String.valueOf(result.getMinimumPrice()));
+                maximumPrice.setText(String.valueOf(result.getMaximumPrice()));
 
-            updateViewsVisibility(View.VISIBLE, new View[]{averagePrice, minimumPrice, maximumPrice, moneySymbol});
+                updateViewsVisibility(View.VISIBLE, new View[]{averagePrice, minimumPrice, maximumPrice, moneySymbol});
+            }
         }
     }
 
