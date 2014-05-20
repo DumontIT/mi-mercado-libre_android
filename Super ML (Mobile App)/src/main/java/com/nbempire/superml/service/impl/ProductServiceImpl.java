@@ -1,10 +1,8 @@
 package com.nbempire.superml.service.impl;
 
-import com.nbempire.superml.dao.impl.ArticleDaoImplSpring;
-import com.nbempire.superml.domain.Article;
+import com.nbempire.superml.dao.ProductDao;
+import com.nbempire.superml.dao.impl.ProductDaoImplSpring;
 import com.nbempire.superml.service.ProductService;
-
-import java.util.List;
 
 /**
  * TODO : Javadoc for
@@ -16,17 +14,10 @@ import java.util.List;
  */
 public class ProductServiceImpl implements ProductService {
 
-    private ArticleService articleService = new ArticleServiceImpl(new ArticleDaoImplSpring());
+    private ProductDao productDao = new ProductDaoImplSpring();
 
     @Override
     public float findAveragePrice(String query) {
-        List<Article> articles = articleService.findArticlesMatching(query);
-
-        float total = 0;
-        for (Article eachArticle : articles) {
-            total += eachArticle.getPrice();
-        }
-
-        return total / articles.size();
+        return productDao.findByQuery(query).getAveragePrice();
     }
 }
