@@ -3,10 +3,11 @@
 
     <string name="app_name">Super ML</string>
     <string name="title_section_average_price">Precio Promedio</string>
-    <string name="title_section_my_queries">Mis Productos</string>
+    <string name="title_section_my_queries">Mis Búsquedas</string>
     <string name="action_settings">Configuración</string>
     <string name="query_label">¿Qué estas buscando?</string>
     <string name="search_button_label">Ver Precio Promedio</string>
     <string name="moneySymbol">$</string>
+    <string name="section_my_query_help_text">Elegí una categoría para encontrar las mejores publicaciones</string>
 
 </resources>
