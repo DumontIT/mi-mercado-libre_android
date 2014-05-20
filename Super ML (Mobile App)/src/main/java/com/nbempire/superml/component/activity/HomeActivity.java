@@ -1,5 +1,6 @@
 package com.nbempire.superml.component.activity;
 
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
@@ -214,24 +215,34 @@ public class HomeActivity extends ActionBarActivity implements ActionBar.TabList
         }
     }
 
+    private void updateViewsVisibility(final int visibility, View[] views) {
+        for (View eachView : views) {
+            eachView.setVisibility(visibility);
+        }
+    }
+
     public void searchAveragePrice(View view) {
         Log.i(TAG, "Searching product: " + query.getText());
 
         updateViewsVisibility(View.INVISIBLE, new View[]{averagePrice, minimumPrice, maximumPrice, moneySymbol});
 
-        //  TODO : Do this in an AsyncTask because it is required in lastest Android versions.
-        Product product = productService.findByQuery(query.getText().toString());
-
-        averagePrice.setText(String.valueOf(product.getAveragePrice()));
-        minimumPrice.setText(String.valueOf(product.getMinimumPrice()));
-        maximumPrice.setText(String.valueOf(product.getMaximumPrice()));
-
-        updateViewsVisibility(View.VISIBLE, new View[]{averagePrice, minimumPrice, maximumPrice, moneySymbol});
+        new CallSuperMLApiAsyncTask().execute(query.getText().toString());
     }
 
-    private void updateViewsVisibility(final int visibility, View[] views) {
-        for (View eachView : views) {
-            eachView.setVisibility(visibility);
+    private class CallSuperMLApiAsyncTask extends AsyncTask<String, Boolean, Product> {
+
+        @Override
+        protected Product doInBackground(String... params) {
+            return productService.findByQuery(params[0]);
+        }
+
+        @Override
+        protected void onPostExecute(Product result) {
+            averagePrice.setText(String.valueOf(result.getAveragePrice()));
+            minimumPrice.setText(String.valueOf(result.getMinimumPrice()));
+            maximumPrice.setText(String.valueOf(result.getMaximumPrice()));
+
+            updateViewsVisibility(View.VISIBLE, new View[]{averagePrice, minimumPrice, maximumPrice, moneySymbol});
         }
     }
 }
