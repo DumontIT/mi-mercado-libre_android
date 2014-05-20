@@ -2,7 +2,9 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://$PROJECT_DIR$/Precio Promedio.iml" filepath="$PROJECT_DIR$/Precio Promedio.iml" />
+      <module fileurl="file://$PROJECT_DIR$/Super ML (Mobile App).iml" filepath="$PROJECT_DIR$/Super ML (Mobile App).iml" />
+      <module fileurl="file://$PROJECT_DIR$/mobileApp.iml" filepath="$PROJECT_DIR$/mobileApp.iml" />
+      <module fileurl="file://$PROJECT_DIR$/precio-promedio.iml" filepath="$PROJECT_DIR$/precio-promedio.iml" />
     </modules>
   </component>
 </project>
