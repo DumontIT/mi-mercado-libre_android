@@ -1,5 +1,7 @@
 package com.nbempire.superml.service;
 
+import com.nbempire.superml.domain.Product;
+
 /**
  * TODO : Javadoc for
  * <p/>
@@ -18,5 +20,5 @@ public interface ProductService {
      *
      * @return The average price.
      */
-    float findAveragePrice(String query);
+    Product findByQuery(String query);
 }

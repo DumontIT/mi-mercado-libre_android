@@ -30,12 +30,44 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textAppearance="?android:attr/textAppearanceLarge"
-        android:id="@+id/homeSearchResult"
+        android:id="@+id/homeAveragePrice"
         android:layout_gravity="center_horizontal"
         android:visibility="invisible"
-        android:textSize="60sp"
-        android:layout_alignParentBottom="true"
+        android:textSize="@dimen/average_price_size"
+        android:singleLine="true"
+        android:layout_centerVertical="true"
+        android:layout_centerHorizontal="true" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceLarge"
+        android:id="@+id/homeMinimumPrice"
+        android:longClickable="true"
+        android:textColor="#ff99cc00"
+        android:layout_below="@+id/homeAveragePrice"
         android:layout_centerHorizontal="true"
-        android:singleLine="true" />
+        android:visibility="invisible" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceMedium"
+        android:id="@+id/homeMaximumPrice"
+        android:textColor="#ffff4444"
+        android:layout_above="@+id/homeAveragePrice"
+        android:layout_centerHorizontal="true"
+        android:visibility="invisible" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/moneySymbol"
+        android:id="@+id/homeMoneySymbol"
+        android:layout_centerVertical="true"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:textSize="@dimen/money_symbol_size"
+        android:visibility="invisible" />
 
 </RelativeLayout>

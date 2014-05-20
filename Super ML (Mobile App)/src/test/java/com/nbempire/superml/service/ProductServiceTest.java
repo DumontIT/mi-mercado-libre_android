@@ -13,7 +13,7 @@ public class ProductServiceTest {
      */
     @Test
     public void testfindAveragePrice() throws Exception {
-        float averagePrice = productService.findAveragePrice("gol trend pack iii");
+        float averagePrice = productService.findByQuery("gol trend pack iii");
 
         Assert.assertNotEquals((float) 0, averagePrice);
         Assert.assertEquals("Average price is not OK", 1790.25, averagePrice, 0);

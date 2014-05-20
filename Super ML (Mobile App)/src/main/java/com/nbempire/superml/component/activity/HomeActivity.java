@@ -17,6 +17,7 @@ import android.view.ViewGroup;
 import android.widget.EditText;
 import android.widget.TextView;
 import com.nbempire.superml.R;
+import com.nbempire.superml.domain.Product;
 import com.nbempire.superml.service.ProductService;
 import com.nbempire.superml.service.impl.ProductServiceImpl;
 
@@ -43,6 +44,16 @@ public class HomeActivity extends ActionBarActivity implements ActionBar.TabList
      * The {@link ViewPager} that will host the section contents.
      */
     ViewPager mViewPager;
+
+    private static EditText query;
+
+    private static TextView averagePrice;
+
+    private static TextView minimumPrice;
+
+    private static TextView maximumPrice;
+
+    private static TextView moneySymbol;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -177,6 +188,10 @@ public class HomeActivity extends ActionBarActivity implements ActionBar.TabList
             return fragment;
         }
 
+
+        public PlaceholderFragment() {
+        }
+
         public PlaceholderFragment(int sectionNumer) {
             this.sectionNumer = sectionNumer;
         }
@@ -190,24 +205,33 @@ public class HomeActivity extends ActionBarActivity implements ActionBar.TabList
             }
 
             query = (EditText) container.findViewById(R.id.homeSearchQuery);
-            searchResult = (TextView) container.findViewById(R.id.homeSearchResult);
+            averagePrice = (TextView) container.findViewById(R.id.homeAveragePrice);
+            minimumPrice = (TextView) container.findViewById(R.id.homeMinimumPrice);
+            maximumPrice = (TextView) container.findViewById(R.id.homeMaximumPrice);
+            moneySymbol = (TextView) container.findViewById(R.id.homeMoneySymbol);
 
             return inflater.inflate(fragmentLayoutId, container, false);
         }
     }
 
     public void searchAveragePrice(View view) {
-        Log.i(TAG, "Searching average price for: " + query.getText());
+        Log.i(TAG, "Searching product: " + query.getText());
 
-        searchResult.setVisibility(View.INVISIBLE);
+        updateViewsVisibility(View.INVISIBLE, new View[]{averagePrice, minimumPrice, maximumPrice, moneySymbol});
 
-        float averagePrice = productService.findAveragePrice(query.getText().toString());
+        //  TODO : Do this in an AsyncTask because it is required in lastest Android versions.
+        Product product = productService.findByQuery(query.getText().toString());
 
-        searchResult.setText(String.valueOf(averagePrice));
-        searchResult.setVisibility(View.VISIBLE);
+        averagePrice.setText(String.valueOf(product.getAveragePrice()));
+        minimumPrice.setText(String.valueOf(product.getMinimumPrice()));
+        maximumPrice.setText(String.valueOf(product.getMaximumPrice()));
+
+        updateViewsVisibility(View.VISIBLE, new View[]{averagePrice, minimumPrice, maximumPrice, moneySymbol});
     }
 
-    private static EditText query;
-
-    private static TextView searchResult;
+    private void updateViewsVisibility(final int visibility, View[] views) {
+        for (View eachView : views) {
+            eachView.setVisibility(visibility);
+        }
+    }
 }

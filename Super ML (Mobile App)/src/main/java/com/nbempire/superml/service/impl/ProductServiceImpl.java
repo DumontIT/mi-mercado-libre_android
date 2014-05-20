@@ -2,6 +2,7 @@ package com.nbempire.superml.service.impl;
 
 import com.nbempire.superml.dao.ProductDao;
 import com.nbempire.superml.dao.impl.ProductDaoImplSpring;
+import com.nbempire.superml.domain.Product;
 import com.nbempire.superml.service.ProductService;
 
 /**
@@ -17,7 +18,7 @@ public class ProductServiceImpl implements ProductService {
     private ProductDao productDao = new ProductDaoImplSpring();
 
     @Override
-    public float findAveragePrice(String query) {
-        return productDao.findByQuery(query).getAveragePrice();
+    public Product findByQuery(String query) {
+        return productDao.findByQuery(query);
     }
 }

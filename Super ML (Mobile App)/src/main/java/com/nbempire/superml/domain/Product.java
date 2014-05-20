@@ -10,9 +10,21 @@ package com.nbempire.superml.domain;
  */
 public class Product {
 
-    private float averagePrice;
+    private int averagePrice;
 
-    public float getAveragePrice() {
+    private int minimumPrice;
+
+    private int maximumPrice;
+
+    public int getAveragePrice() {
         return averagePrice;
+    }
+
+    public int getMinimumPrice() {
+        return minimumPrice;
+    }
+
+    public int getMaximumPrice() {
+        return maximumPrice;
     }
 }
