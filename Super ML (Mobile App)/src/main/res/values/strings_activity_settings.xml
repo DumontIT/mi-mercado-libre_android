@@ -1,0 +1,38 @@
+<resources>
+    <string name="title_activity_settings">Configuración</string>
+
+    <string name="pref_header_general">General</string>
+
+    <string name="pref_choose_country">Cambiar país</string>
+    <string-array name="pref_countries_titles">
+        <item>Argentina</item>
+        <item>Brasil</item>
+        <item>Chile</item>
+        <item>Colombia</item>
+        <item>Costa Rica</item>
+        <item>Dominicana</item>
+        <item>Ecuador</item>
+        <item>Mexico</item>
+        <item>Panamá</item>
+        <item>Perú</item>
+        <item>Portugal</item>
+        <item>Uruguay</item>
+        <item>Venezuela</item>
+    </string-array>
+    <string-array name="pref_countries_list_values">
+        <item>MLA</item>
+        <item>MLB</item>
+        <item>MLC</item>
+        <item>MCO</item>
+        <item>MCR</item>
+        <item>MRD</item>
+        <item>MEC</item>
+        <item>MLM</item>
+        <item>MPA</item>
+        <item>MPE</item>
+        <item>MPT</item>
+        <item>MLU</item>
+        <item>MLV</item>
+    </string-array>
+
+</resources>

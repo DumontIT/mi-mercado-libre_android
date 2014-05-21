@@ -12,5 +12,5 @@ import com.nbempire.superml.domain.Product;
  */
 public interface ProductDao {
 
-    Product findByQuery(String query);
+    Product findByQuery(String siteId, String query);
 }

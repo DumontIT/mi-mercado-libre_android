@@ -15,10 +15,12 @@ public interface ProductService {
     /**
      * Finds the average price for a specified query.
      *
+     * @param siteId
+     *         The site ID where to look for.
      * @param query
      *         The user query. The query should be as detailed as possible to find the best average price.
      *
      * @return The average price.
      */
-    Product findByQuery(String query);
+    Product findByQuery(String siteId, String query);
 }

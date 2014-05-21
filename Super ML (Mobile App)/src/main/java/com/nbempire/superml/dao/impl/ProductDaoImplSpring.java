@@ -23,8 +23,9 @@ public class ProductDaoImplSpring implements ProductDao {
     private static final String TAG = "ProductDaoImplSpring";
 
     @Override
-    public Product findByQuery(String query) {
-        String urlString = "http://super-ml.herokuapp.com/pp/averagePrice/" + query;
+    public Product findByQuery(String siteId, String query) {
+        //  TODO : Refactor :  Extract host to MainKeys or something similar.
+        String urlString = String.format("http://super-ml.herokuapp.com/%1$s/averagePrice/%2$s", siteId, query);
 
         // Create a new RestTemplate instance
         RestTemplate restTemplate = new RestTemplate();
@@ -34,11 +35,13 @@ public class ProductDaoImplSpring implements ProductDao {
 
         Product result = null;
         try {
-            // Make the HTTP GET request, marshaling the response to a String
+            Log.i(TAG, "GET call against: " + urlString);
+
             result = restTemplate.getForObject(urlString, Product.class);
+
             Log.i(TAG, "Obtained product: " + result.getAveragePrice());
         } catch (RestClientException restClientException) {
-            Log.e(TAG, "An error occurred while searching for: \"" + query + "\"");
+            Log.e(TAG, "An error occurred while searching for: \"" + query + "\", " + restClientException.getMessage());
         }
 
         return result;

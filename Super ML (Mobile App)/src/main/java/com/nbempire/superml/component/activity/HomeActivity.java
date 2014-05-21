@@ -4,10 +4,12 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.content.SharedPreferences;
 import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageManager;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
@@ -49,17 +51,19 @@ public class HomeActivity extends ActionBarActivity implements ActionBar.TabList
 
     private static ProductService productService = new ProductServiceImpl();
 
+    private SharedPreferences sharedPreferences;
+
     /**
      * The {@link android.support.v4.view.PagerAdapter} that will provide fragments for each of the sections. We use a {@link FragmentPagerAdapter}
      * derivative, which will keep every loaded fragment in memory. If this becomes too memory intensive, it may be best to switch to a {@link
      * android.support.v4.app.FragmentStatePagerAdapter}.
      */
-    SectionsPagerAdapter mSectionsPagerAdapter;
+    private SectionsPagerAdapter mSectionsPagerAdapter;
 
     /**
      * The {@link ViewPager} that will host the section contents.
      */
-    ViewPager mViewPager;
+    private ViewPager mViewPager;
 
     private static EditText query;
 
@@ -80,17 +84,14 @@ public class HomeActivity extends ActionBarActivity implements ActionBar.TabList
         final ActionBar actionBar = getSupportActionBar();
         actionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_TABS);
 
-        // Create the adapter that will return a fragment for each of the three
-        // primary sections of the activity.
+        // Create the adapter that will return a fragment for each of the three primary sections of the activity.
         mSectionsPagerAdapter = new SectionsPagerAdapter(getSupportFragmentManager());
 
         // Set up the ViewPager with the sections adapter.
         mViewPager = (ViewPager) findViewById(R.id.pager);
         mViewPager.setAdapter(mSectionsPagerAdapter);
 
-        // When swiping between different sections, select the corresponding
-        // tab. We can also use ActionBar.Tab#select() to do this if we have
-        // a reference to the Tab.
+        // When swiping between different sections, select the corresponding tab. We can also use ActionBar.Tab#select() to do this if we have a reference to the Tab.
         mViewPager.setOnPageChangeListener(new ViewPager.SimpleOnPageChangeListener() {
             @Override
             public void onPageSelected(int position) {
@@ -100,12 +101,12 @@ public class HomeActivity extends ActionBarActivity implements ActionBar.TabList
 
         // For each of the sections in the app, add a tab to the action bar.
         for (int i = 0; i < mSectionsPagerAdapter.getCount(); i++) {
-            // Create a tab with text corresponding to the page title defined by
-            // the adapter. Also specify this Activity object, which implements
-            // the TabListener interface, as the callback (listener) for when
-            // this tab is selected.
+            // Create a tab with text corresponding to the page title defined by the adapter. Also specify this Activity object, which implements the
+            // TabListener interface, as the callback (listener) for when this tab is selected.
             actionBar.addTab(actionBar.newTab().setText(mSectionsPagerAdapter.getPageTitle(i)).setTabListener(this));
         }
+
+        sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
     }
 
 
@@ -118,13 +119,15 @@ public class HomeActivity extends ActionBarActivity implements ActionBar.TabList
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
+        // Handle action bar item clicks here. The action bar will automatically handle clicks on the Home/Up button, so long as you specify a parent activity in AndroidManifest.xml.
+        boolean consumed;
+
         int id = item.getItemId();
         if (id == R.id.action_settings) {
+            startActivity(new Intent(this, SettingsActivity.class));
             return true;
         }
+
         return super.onOptionsItemSelected(item);
     }
 
@@ -283,15 +286,20 @@ public class HomeActivity extends ActionBarActivity implements ActionBar.TabList
         } else {
             updateViewsVisibility(View.INVISIBLE, new View[]{averagePrice, minimumPrice, maximumPrice, moneySymbol});
 
-            new CallSuperMLApiAsyncTask().execute(query.getText().toString());
+            //  TODO : Extract "MLA" default hard-coding to MainKeys or something similar.
+            new CallSuperMLApiAsyncTask().execute(sharedPreferences.getString("country", "MLA"), query.getText().toString());
         }
     }
 
+    /**
+     * AsyncTask that calls server to find a specified product's average price. This way of calling a REST API is required in newewst Android
+     * versions.
+     */
     private class CallSuperMLApiAsyncTask extends AsyncTask<String, Boolean, Product> {
 
         @Override
         protected Product doInBackground(String... params) {
-            return productService.findByQuery(params[0]);
+            return productService.findByQuery(params[0], params[1]);
         }
 
         @Override

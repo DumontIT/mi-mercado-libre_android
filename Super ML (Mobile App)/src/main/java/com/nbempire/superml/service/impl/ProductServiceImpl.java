@@ -18,7 +18,7 @@ public class ProductServiceImpl implements ProductService {
     private ProductDao productDao = new ProductDaoImplSpring();
 
     @Override
-    public Product findByQuery(String query) {
-        return productDao.findByQuery(query);
+    public Product findByQuery(String siteId, String query) {
+        return productDao.findByQuery(siteId, query);
     }
 }
