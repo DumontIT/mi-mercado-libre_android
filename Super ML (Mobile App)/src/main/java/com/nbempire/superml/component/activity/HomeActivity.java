@@ -160,8 +160,7 @@ public class HomeActivity extends ActionBarActivity implements ActionBar.TabList
 
         @Override
         public Fragment getItem(int position) {
-            // getItem is called to instantiate the fragment for the given page.
-            // Return a PlaceholderFragment (defined as a static inner class below).
+            // getItem is called to instantiate the fragment for the given page. Return a PlaceholderFragment (defined as a static inner class below).
             return PlaceholderFragment.newInstance(position + 1);
         }
 
@@ -192,43 +191,36 @@ public class HomeActivity extends ActionBarActivity implements ActionBar.TabList
      */
     public static class PlaceholderFragment extends Fragment {
 
-        private int sectionNumer;
-
         /**
          * The fragment argument representing the section number for this fragment.
          */
-        private static final String ARG_SECTION_NUMBER = "section_number";
+        private static final String ARG_SECTION_NUMBER = "sectionNumber";
 
         /**
          * Returns a new instance of this fragment for the given section number.
          */
         public static PlaceholderFragment newInstance(int sectionNumber) {
-            PlaceholderFragment fragment = new PlaceholderFragment(sectionNumber);
-            Bundle args = new Bundle();
-            args.putInt(ARG_SECTION_NUMBER, sectionNumber);
-            fragment.setArguments(args);
+            PlaceholderFragment fragment = new PlaceholderFragment();
+            Bundle arguments = new Bundle();
+            arguments.putInt(ARG_SECTION_NUMBER, sectionNumber);
+            fragment.setArguments(arguments);
             return fragment;
-        }
-
-
-        public PlaceholderFragment() {
-        }
-
-        public PlaceholderFragment(int sectionNumer) {
-            this.sectionNumer = sectionNumer;
         }
 
         @Override
         public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+            int sectionNumber = this.getArguments().getInt(ARG_SECTION_NUMBER);
+            Log.d(TAG, "Creating fragment view for sectionNumber: " + sectionNumber);
+
             int fragmentLayoutId = R.layout.fragment_average_price;
 
-            switch (sectionNumer) {
+            switch (sectionNumber) {
                 case 2:
                     fragmentLayoutId = R.layout.fragment_my_queries;
             }
             View createdLayoutView = inflater.inflate(fragmentLayoutId, container, false);
 
-            switch (sectionNumer) {
+            switch (sectionNumber) {
                 case 1:
                     onCreateViewForAveragePriceFragment(createdLayoutView);
                     break;
