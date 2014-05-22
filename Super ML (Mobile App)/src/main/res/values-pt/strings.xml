@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-    <string name="app_name">Super ML</string>
+    <string name="app_name">Meu Mercado Livre</string>
     <string name="title_section_average_price">Preço Médio</string>
     <string name="title_section_my_queries">Minhas pesquisas</string>
     <string name="action_settings">Configurações</string>
