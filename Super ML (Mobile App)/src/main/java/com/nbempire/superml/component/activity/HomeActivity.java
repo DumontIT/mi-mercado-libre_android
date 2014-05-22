@@ -28,6 +28,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.TextView;
@@ -77,6 +78,8 @@ public class HomeActivity extends ActionBarActivity implements ActionBar.TabList
     private static TextView moneySymbol;
 
     private static TextView countryLabel;
+
+    private static Button saveQueryButton;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -238,6 +241,7 @@ public class HomeActivity extends ActionBarActivity implements ActionBar.TabList
             maximumPrice = (TextView) container.findViewById(R.id.homeMaximumPrice);
             moneySymbol = (TextView) container.findViewById(R.id.homeMoneySymbol);
             countryLabel = (TextView) container.findViewById(R.id.homeCountryLabel);
+            saveQueryButton = (Button) container.findViewById(R.id.saveQueryButton);
 
             String choosenCountry = getEntryForListPreferenceValue(sharedPreferences.getString("country", "MLA"), R.array.pref_countries_values,
                                                                    R.array.pref_countries_entries);
@@ -308,15 +312,26 @@ public class HomeActivity extends ActionBarActivity implements ActionBar.TabList
     }
 
     public void searchAveragePrice(View view) {
+        Log.d(TAG, "View average price button pressed");
         Log.i(TAG, "Searching product: " + query.getText());
 
         if (query.getText().toString().equals("")) {
             Toast.makeText(this, R.string.average_price_must_enter_query, Toast.LENGTH_SHORT).show();
         } else {
-            updateViewsVisibility(View.INVISIBLE, new View[]{averagePrice, minimumPrice, maximumPrice, moneySymbol});
+            updateViewsVisibility(View.INVISIBLE, new View[]{averagePrice, minimumPrice, maximumPrice, moneySymbol, saveQueryButton});
 
             //  TODO : Extract "MLA" default hard-coding to MainKeys or something similar.
             new CallSuperMLApiAsyncTask().execute(sharedPreferences.getString("country", "MLA"), query.getText().toString());
+        }
+    }
+
+    public void saveQuery(View view) {
+        Log.d(TAG, "Save query button pressed.");
+
+        if (query.getText().toString().equals("")) {
+            Toast.makeText(this, R.string.average_price_must_enter_query, Toast.LENGTH_SHORT).show();
+        } else {
+            startActivity(new Intent(this, AddQueryActivity.class).putExtra(AddQueryActivity.PARAMETER_QUERY, query.getText().toString()));
         }
     }
 
@@ -340,7 +355,7 @@ public class HomeActivity extends ActionBarActivity implements ActionBar.TabList
                 minimumPrice.setText(String.valueOf(result.getMinimumPrice()));
                 maximumPrice.setText(String.valueOf(result.getMaximumPrice()));
 
-                updateViewsVisibility(View.VISIBLE, new View[]{averagePrice, minimumPrice, maximumPrice, moneySymbol});
+                updateViewsVisibility(View.VISIBLE, new View[]{averagePrice, minimumPrice, maximumPrice, moneySymbol, saveQueryButton});
             }
         }
     }
