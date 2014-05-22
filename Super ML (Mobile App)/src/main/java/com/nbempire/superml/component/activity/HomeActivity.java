@@ -7,6 +7,7 @@ import android.content.IntentFilter;
 import android.content.SharedPreferences;
 import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageManager;
+import android.content.res.Resources;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
@@ -51,7 +52,7 @@ public class HomeActivity extends ActionBarActivity implements ActionBar.TabList
 
     private static ProductService productService = new ProductServiceImpl();
 
-    private SharedPreferences sharedPreferences;
+    private static SharedPreferences sharedPreferences;
 
     /**
      * The {@link android.support.v4.view.PagerAdapter} that will provide fragments for each of the sections. We use a {@link FragmentPagerAdapter}
@@ -74,6 +75,8 @@ public class HomeActivity extends ActionBarActivity implements ActionBar.TabList
     private static TextView maximumPrice;
 
     private static TextView moneySymbol;
+
+    private static TextView countryLabel;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -242,6 +245,40 @@ public class HomeActivity extends ActionBarActivity implements ActionBar.TabList
             minimumPrice = (TextView) container.findViewById(R.id.homeMinimumPrice);
             maximumPrice = (TextView) container.findViewById(R.id.homeMaximumPrice);
             moneySymbol = (TextView) container.findViewById(R.id.homeMoneySymbol);
+            countryLabel = (TextView) container.findViewById(R.id.homeCountryLabel);
+
+            String choosenCountry = getEntryForListPreferenceValue(sharedPreferences.getString("country", "MLA"), R.array.pref_countries_values,
+                                                                   R.array.pref_countries_entries);
+            countryLabel.setText(String.format("%s %s", getText(R.string.home_checking_ml_site), choosenCountry));
+        }
+
+        /**
+         * Get selected setting entry (the label) for a specified ListPreference entries-values pair.
+         *
+         * @param settingValue
+         *         The setting stored value. You can get that value by doing sharedPreferences.getString({keyName}, "defaultValue").
+         * @param valuesResourceId
+         *         Resource ID for the string array resource where to look for the specified {@code settingValue}. This resource is set in
+         *         ListPreference definition.
+         * @param entriesResourceId
+         *         Resource ID that contains entries for the specified {@code valuesResourceId}.
+         *
+         * @return The corresponding entry for the specified {@code settingValue}.
+         */
+        private String getEntryForListPreferenceValue(String settingValue, int valuesResourceId, int entriesResourceId) {
+            //  TODO : Refactor :  Extract this method to some helper class or something similar.
+            Resources resources = getResources();
+
+            String[] values = resources.getStringArray(valuesResourceId);
+            int index;
+            for (index = 0; index < values.length; index++) {
+                String eachKey = values[index];
+                if (eachKey.equals(settingValue)) {
+                    break;
+                }
+            }
+
+            return resources.getStringArray(entriesResourceId)[index];
         }
 
         private void onCreateViewForMyQueriesFragment(final View container) {

@@ -4,7 +4,7 @@
     <string name="pref_header_general">General</string>
 
     <string name="pref_choose_country">Cambiar país</string>
-    <string-array name="pref_countries_titles">
+    <string-array name="pref_countries_entries">
         <item>Argentina</item>
         <item>Brasil</item>
         <item>Chile</item>
@@ -19,7 +19,7 @@
         <item>Uruguay</item>
         <item>Venezuela</item>
     </string-array>
-    <string-array name="pref_countries_list_values">
+    <string-array name="pref_countries_values">
         <item>MLA</item>
         <item>MLB</item>
         <item>MLC</item>

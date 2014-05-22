@@ -5,8 +5,8 @@
         android:key="country"
         android:title="@string/pref_choose_country"
         android:defaultValue="0"
-        android:entries="@array/pref_countries_titles"
-        android:entryValues="@array/pref_countries_list_values"
+        android:entries="@array/pref_countries_entries"
+        android:entryValues="@array/pref_countries_values"
         android:negativeButtonText="@null"
         android:positiveButtonText="@null" />
 
