@@ -37,8 +37,8 @@ import android.widget.TextView;
 import android.widget.Toast;
 import com.nbempire.superml.MainKeys;
 import com.nbempire.superml.R;
-import com.nbempire.superml.domain.Category;
 import com.nbempire.superml.domain.Product;
+import com.nbempire.superml.domain.Query;
 import com.nbempire.superml.domain.Site;
 import com.nbempire.superml.service.ProductService;
 import com.nbempire.superml.service.SiteService;
@@ -313,28 +313,28 @@ public class HomeActivity extends ActionBarActivity implements ActionBar.TabList
         }
 
         private void onCreateViewForMyQueriesFragment(final View container) {
-            final ListView categories = (ListView) container.findViewById(R.id.listView);
+            final ListView myQueries = (ListView) container.findViewById(R.id.listView);
 
-            final CategoryAdapter mAdapter = new CategoryAdapter(container.getContext());
-            categories.setAdapter(mAdapter);
+            final MyQueriesAdapter myQueriesAdapter = new MyQueriesAdapter(container.getContext());
+            myQueries.setAdapter(myQueriesAdapter);
 
             // Prepare the loader.  Either re-connect with an existing one, or start a new one.
-            getLoaderManager().initLoader(0, null, new LoaderManager.LoaderCallbacks<List<Category>>() {
+            getLoaderManager().initLoader(0, null, new LoaderManager.LoaderCallbacks<List<Query>>() {
                 @Override
-                public Loader<List<Category>> onCreateLoader(int id, Bundle args) {
-                    return new CategoryListLoader(container.getContext());
+                public Loader<List<Query>> onCreateLoader(int id, Bundle args) {
+                    return new QueryListLoader(container.getContext());
                 }
 
                 @Override
-                public void onLoadFinished(Loader<List<Category>> loader, List<Category> data) {
+                public void onLoadFinished(Loader<List<Query>> loader, List<Query> data) {
                     // Set the new data in the adapter.
-                    mAdapter.setData(data);
+                    myQueriesAdapter.setData(data);
                 }
 
                 @Override
-                public void onLoaderReset(Loader<List<Category>> loader) {
+                public void onLoaderReset(Loader<List<Query>> loader) {
                     // Clear the data in the adapter.
-                    mAdapter.setData(null);
+                    myQueriesAdapter.setData(null);
                 }
             });
         }
@@ -406,20 +406,20 @@ public class HomeActivity extends ActionBarActivity implements ActionBar.TabList
         }
     }
 
-    public static class CategoryAdapter extends ArrayAdapter<Category> {
+    public static class MyQueriesAdapter extends ArrayAdapter<Query> {
 
         private final LayoutInflater layoutInflater;
 
-        public CategoryAdapter(Context context) {
+        public MyQueriesAdapter(Context context) {
             super(context, android.R.layout.simple_list_item_1);
             layoutInflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         }
 
-        public void setData(List<Category> data) {
+        public void setData(List<Query> data) {
             clear();
             if (data != null) {
-                for (Category eachCategory : data) {
-                    add(eachCategory);
+                for (Query eachQuery : data) {
+                    add(eachQuery);
                 }
             }
         }
@@ -437,8 +437,8 @@ public class HomeActivity extends ActionBarActivity implements ActionBar.TabList
                 view = convertView;
             }
 
-            Category category = getItem(position);
-            ((TextView) view.findViewById(R.id.title)).setText(category.getName());
+            Query query = getItem(position);
+            ((TextView) view.findViewById(R.id.title)).setText(query.getText());
 
             return view;
         }
@@ -449,9 +449,9 @@ public class HomeActivity extends ActionBarActivity implements ActionBar.TabList
      */
     public static class PackageIntentReceiver extends BroadcastReceiver {
 
-        final CategoryListLoader mLoader;
+        final QueryListLoader mLoader;
 
-        public PackageIntentReceiver(CategoryListLoader loader) {
+        public PackageIntentReceiver(QueryListLoader loader) {
             mLoader = loader;
             IntentFilter filter = new IntentFilter(Intent.ACTION_PACKAGE_ADDED);
             filter.addAction(Intent.ACTION_PACKAGE_REMOVED);
@@ -475,15 +475,15 @@ public class HomeActivity extends ActionBarActivity implements ActionBar.TabList
     /**
      * A custom Loader that loads all of the installed applications.
      */
-    public static class CategoryListLoader extends AsyncTaskLoader<List<Category>> {
+    public static class QueryListLoader extends AsyncTaskLoader<List<Query>> {
 
         private final PackageManager packageManager;
 
-        private List<Category> categories;
+        private List<Query> categories;
 
         private PackageIntentReceiver packageIntentReceiver;
 
-        public CategoryListLoader(Context context) {
+        public QueryListLoader(Context context) {
             super(context);
 
             // Retrieve the package manager for later use; note we don't use 'context' directly but instead the save global application context returned by getContext().
@@ -495,7 +495,7 @@ public class HomeActivity extends ActionBarActivity implements ActionBar.TabList
          * published by the loader.
          */
         @Override
-        public List<Category> loadInBackground() {
+        public List<Query> loadInBackground() {
             // Retrieve all known applications.
             List<ApplicationInfo> apps = packageManager.getInstalledApplications(
                     PackageManager.GET_UNINSTALLED_PACKAGES |
@@ -505,15 +505,15 @@ public class HomeActivity extends ActionBarActivity implements ActionBar.TabList
                 apps = new ArrayList<ApplicationInfo>();
             }
 
-            // Create corresponding array of categories and load their labels.
-            List<Category> categories = new ArrayList<Category>(apps.size());
+            // Create corresponding array of queries and load their labels.
+            List<Query> queries = new ArrayList<Query>(apps.size());
             for (ApplicationInfo app : apps) {
                 if (app.className != null && !app.className.equals("")) {
-                    categories.add(new Category(app.className));
+                    queries.add(new Query(app.className));
                 }
             }
 
-            return categories;
+            return queries;
         }
 
         /**
@@ -521,7 +521,7 @@ public class HomeActivity extends ActionBarActivity implements ActionBar.TabList
          * a little more logic.
          */
         @Override
-        public void deliverResult(List<Category> data) {
+        public void deliverResult(List<Query> data) {
             if (isReset()) {
                 // An async query came in while the loader is stopped.  We don't need the result.
                 if (data != null) {
@@ -529,7 +529,7 @@ public class HomeActivity extends ActionBarActivity implements ActionBar.TabList
                 }
             }
 
-            List<Category> oldApps = data;
+            List<Query> oldApps = data;
             categories = data;
 
             if (isStarted()) {
@@ -578,7 +578,7 @@ public class HomeActivity extends ActionBarActivity implements ActionBar.TabList
          * Handles a request to cancel a load.
          */
         @Override
-        public void onCanceled(List<Category> data) {
+        public void onCanceled(List<Query> data) {
             super.onCanceled(data);
 
             // At this point we can release the resources associated with 'data' if needed.
@@ -611,7 +611,7 @@ public class HomeActivity extends ActionBarActivity implements ActionBar.TabList
         /**
          * Helper function to take care of releasing resources associated with an actively loaded data set.
          */
-        protected void onReleaseResources(List<Category> apps) {
+        protected void onReleaseResources(List<Query> apps) {
             // For a simple List<> there is nothing to do.  For something like a Cursor, we would close it here.
         }
     }
