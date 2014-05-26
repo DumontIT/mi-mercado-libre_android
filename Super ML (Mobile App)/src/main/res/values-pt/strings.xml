@@ -14,7 +14,7 @@
     <string name="section_my_query_help_text">Seleccione uma categoria para encontrar as melhores publicações</string>
     <string name="average_price_must_enter_query">Você deve digitar um produto</string>
     <string name="error_generic">Ocorreu um erro, por favor, tente novamente mais tarde</string>
-    <string name="home_checking_ml_site">Você está vendo o Mercado Livre</string>
+    <string name="home_checking_ml_site">Você está em Mercado Livre</string>
     <string name="save">Salvar</string>
     <string name="add_query_introduction_text">Adicionando pesquisa:</string>
 
