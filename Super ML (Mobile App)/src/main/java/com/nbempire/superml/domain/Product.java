@@ -18,6 +18,10 @@ public class Product {
 
     private String currencyId;
 
+    private Filter[] filters;
+
+    private Filter[] availableFilters;
+
     public int getAveragePrice() {
         return averagePrice;
     }

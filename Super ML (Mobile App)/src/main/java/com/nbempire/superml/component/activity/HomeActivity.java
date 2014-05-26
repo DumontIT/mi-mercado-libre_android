@@ -313,10 +313,10 @@ public class HomeActivity extends ActionBarActivity implements ActionBar.TabList
         }
 
         private void onCreateViewForMyQueriesFragment(final View container) {
-            final ListView categories = (ListView) container.findViewById(R.id.listView);
+            final ListView myQueries = (ListView) container.findViewById(R.id.listView);
 
-            final CategoryAdapter mAdapter = new CategoryAdapter(container.getContext());
-            categories.setAdapter(mAdapter);
+            final MyQueriesAdapter mAdapter = new MyQueriesAdapter(container.getContext());
+            myQueries.setAdapter(mAdapter);
 
             // Prepare the loader.  Either re-connect with an existing one, or start a new one.
             getLoaderManager().initLoader(0, null, new LoaderManager.LoaderCallbacks<List<Category>>() {
@@ -406,11 +406,12 @@ public class HomeActivity extends ActionBarActivity implements ActionBar.TabList
         }
     }
 
-    public static class CategoryAdapter extends ArrayAdapter<Category> {
+    public static class MyQueriesAdapter extends ArrayAdapter<Category> {
 
+        //  Change this to a list of my queries (the ones that I'm subscribed).
         private final LayoutInflater layoutInflater;
 
-        public CategoryAdapter(Context context) {
+        public MyQueriesAdapter(Context context) {
             super(context, android.R.layout.simple_list_item_1);
             layoutInflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         }

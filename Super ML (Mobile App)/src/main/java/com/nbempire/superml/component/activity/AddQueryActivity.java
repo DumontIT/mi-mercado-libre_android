@@ -3,8 +3,10 @@ package com.nbempire.superml.component.activity;
 import android.os.Bundle;
 import android.support.v7.app.ActionBarActivity;
 import android.util.Log;
+import android.widget.ListView;
 import android.widget.TextView;
 import com.nbempire.superml.R;
+import com.nbempire.superml.adapter.CategoryAdapter;
 
 /**
  * Here the user will subscribe itself to a custom query to receive notifications about new articles.
@@ -36,5 +38,10 @@ public class AddQueryActivity extends ActionBarActivity {
 
         TextView introductionTextView = (TextView) findViewById(R.id.add_query_introduction_text);
         introductionTextView.setText(String.format("%s %s", introductionTextView.getText(), query));
+
+        ListView categories = (ListView) findViewById(R.id.listView);
+
+        CategoryAdapter categoryAdapter = new CategoryAdapter(this);
+        categories.setAdapter(categoryAdapter);
     }
 }

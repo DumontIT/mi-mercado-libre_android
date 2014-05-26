@@ -15,4 +15,12 @@
         android:textAppearance="?android:attr/textAppearanceMedium"
         android:id="@+id/add_query_introduction_text" />
 
+    <ListView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/listView"
+        android:layout_below="@+id/add_query_introduction_text"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true" />
+
 </RelativeLayout>
