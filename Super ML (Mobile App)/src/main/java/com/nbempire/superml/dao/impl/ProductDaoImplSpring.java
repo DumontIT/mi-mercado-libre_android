@@ -1,6 +1,7 @@
 package com.nbempire.superml.dao.impl;
 
 import android.util.Log;
+import com.nbempire.superml.MainKeys;
 import com.nbempire.superml.dao.ProductDao;
 import com.nbempire.superml.domain.Product;
 import org.springframework.http.converter.json.GsonHttpMessageConverter;
@@ -24,13 +25,11 @@ public class ProductDaoImplSpring implements ProductDao {
 
     @Override
     public Product findByQuery(String siteId, String query) {
-        //  TODO : Refactor :  Extract host to MainKeys or something similar.
-        String urlString = String.format("http://super-ml.herokuapp.com/%1$s/averagePrice/%2$s", siteId, query);
+        String urlString = String.format(MainKeys.API_HOST + "/%1$s/averagePrice/%2$s", siteId, query);
 
         // Create a new RestTemplate instance
         RestTemplate restTemplate = new RestTemplate();
 
-        // Add the String message converter
         restTemplate.getMessageConverters().add(new GsonHttpMessageConverter());
 
         Product result = null;
