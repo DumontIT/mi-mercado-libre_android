@@ -77,10 +77,10 @@
         android:text="@string/save"
         android:id="@+id/saveQueryButton"
         android:onClick="saveQuery"
-        android:layout_alignParentBottom="true"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true"
-        android:visibility="invisible" />
+        android:visibility="invisible"
+        android:layout_above="@+id/homeCountryLabel"
+        android:layout_alignRight="@+id/homeSearchButton"
+        android:layout_alignEnd="@+id/homeSearchButton" />
 
     <TextView
         android:layout_width="wrap_content"
