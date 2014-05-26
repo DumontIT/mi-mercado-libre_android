@@ -89,11 +89,22 @@ public class HomeActivity extends ActionBarActivity implements ActionBar.TabList
 
     private static Button saveQueryButton;
 
+    SharedPreferences.OnSharedPreferenceChangeListener onSharedPreferenceChangeListener = new SharedPreferences.OnSharedPreferenceChangeListener() {
+        @Override
+        public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String key) {
+            if (key.equals(MainKeys.Keys.CURRENT_COUNTRY)) {
+                countryLabel.setText(generateCurrentCountryLabel(getBaseContext()));
+            }
+        }
+    };
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home);
 
+        sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
+        sharedPreferences.registerOnSharedPreferenceChangeListener(onSharedPreferenceChangeListener);
         loadGeneralDataFromServer();
 
         // Set up the action bar.
@@ -121,8 +132,42 @@ public class HomeActivity extends ActionBarActivity implements ActionBar.TabList
             // TabListener interface, as the callback (listener) for when this tab is selected.
             actionBar.addTab(actionBar.newTab().setText(sectionsPagerAdapter.getPageTitle(i)).setTabListener(this));
         }
+    }
 
-        sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
+    private static String generateCurrentCountryLabel(Context context) {
+        String choosenCountry =
+                getEntryForListPreferenceValue(context, sharedPreferences.getString(MainKeys.Keys.CURRENT_COUNTRY, MainKeys.DEFAULT_COUNTRY_ID),
+                                               R.array.pref_countries_values, R.array.pref_countries_entries);
+        return String.format("%s %s", context.getText(R.string.home_checking_ml_site), choosenCountry);
+    }
+
+    /**
+     * Get selected setting entry (the label) for a specified ListPreference entries-values pair.
+     *
+     * @param settingValue
+     *         The setting stored value. You can get that value by doing sharedPreferences.getString({keyName}, "defaultValue").
+     * @param valuesResourceId
+     *         Resource ID for the string array resource where to look for the specified {@code settingValue}. This resource is set in ListPreference
+     *         definition.
+     * @param entriesResourceId
+     *         Resource ID that contains entries for the specified {@code valuesResourceId}.
+     *
+     * @return The corresponding entry for the specified {@code settingValue}.
+     */
+    private static String getEntryForListPreferenceValue(Context context, String settingValue, int valuesResourceId, int entriesResourceId) {
+        //  TODO : Refactor :  Extract this method to some helper class or something similar.
+        Resources resources = context.getResources();
+
+        String[] values = resources.getStringArray(valuesResourceId);
+        int index;
+        for (index = 0; index < values.length; index++) {
+            String eachKey = values[index];
+            if (eachKey.equals(settingValue)) {
+                break;
+            }
+        }
+
+        return resources.getStringArray(entriesResourceId)[index == values.length ? index - 1 : index];
     }
 
     private void loadGeneralDataFromServer() {
@@ -132,7 +177,7 @@ public class HomeActivity extends ActionBarActivity implements ActionBar.TabList
         NetworkInfo activeNetwork = cm.getActiveNetworkInfo();
         boolean isConnected = activeNetwork != null && activeNetwork.isConnectedOrConnecting();
         if (isConnected) {
-            new LoadSitesInfoAsyncTask().execute(this);
+            new LoadSitesInfoAsyncTask().execute(sharedPreferences);
         }
     }
 
@@ -264,39 +309,7 @@ public class HomeActivity extends ActionBarActivity implements ActionBar.TabList
             countryLabel = (TextView) container.findViewById(R.id.homeCountryLabel);
             saveQueryButton = (Button) container.findViewById(R.id.saveQueryButton);
 
-            String choosenCountry =
-                    getEntryForListPreferenceValue(sharedPreferences.getString(MainKeys.Keys.CURRENT_COUNTRY, MainKeys.DEFAULT_COUNTRY_ID),
-                                                   R.array.pref_countries_values, R.array.pref_countries_entries);
-            countryLabel.setText(String.format("%s %s", getText(R.string.home_checking_ml_site), choosenCountry));
-        }
-
-        /**
-         * Get selected setting entry (the label) for a specified ListPreference entries-values pair.
-         *
-         * @param settingValue
-         *         The setting stored value. You can get that value by doing sharedPreferences.getString({keyName}, "defaultValue").
-         * @param valuesResourceId
-         *         Resource ID for the string array resource where to look for the specified {@code settingValue}. This resource is set in
-         *         ListPreference definition.
-         * @param entriesResourceId
-         *         Resource ID that contains entries for the specified {@code valuesResourceId}.
-         *
-         * @return The corresponding entry for the specified {@code settingValue}.
-         */
-        private String getEntryForListPreferenceValue(String settingValue, int valuesResourceId, int entriesResourceId) {
-            //  TODO : Refactor :  Extract this method to some helper class or something similar.
-            Resources resources = getResources();
-
-            String[] values = resources.getStringArray(valuesResourceId);
-            int index;
-            for (index = 0; index < values.length; index++) {
-                String eachKey = values[index];
-                if (eachKey.equals(settingValue)) {
-                    break;
-                }
-            }
-
-            return resources.getStringArray(entriesResourceId)[index == values.length ? index - 1 : index];
+            countryLabel.setText(generateCurrentCountryLabel(container.getContext()));
         }
 
         private void onCreateViewForMyQueriesFragment(final View container) {
@@ -384,10 +397,10 @@ public class HomeActivity extends ActionBarActivity implements ActionBar.TabList
         }
     }
 
-    private class LoadSitesInfoAsyncTask extends AsyncTask<Context, Boolean, List<Site>> {
+    private class LoadSitesInfoAsyncTask extends AsyncTask<SharedPreferences, Boolean, List<Site>> {
 
         @Override
-        protected List<Site> doInBackground(Context... params) {
+        protected List<Site> doInBackground(SharedPreferences... params) {
             siteService.loadSitesInformation(params[0]);
             return null;
         }

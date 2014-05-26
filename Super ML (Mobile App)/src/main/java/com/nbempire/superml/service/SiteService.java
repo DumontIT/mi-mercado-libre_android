@@ -1,6 +1,6 @@
 package com.nbempire.superml.service;
 
-import android.content.Context;
+import android.content.SharedPreferences;
 
 /**
  * TODO : Javadoc for
@@ -12,5 +12,5 @@ import android.content.Context;
  */
 public interface SiteService {
 
-    void loadSitesInformation(Context context);
+    void loadSitesInformation(SharedPreferences sharedPreferences);
 }

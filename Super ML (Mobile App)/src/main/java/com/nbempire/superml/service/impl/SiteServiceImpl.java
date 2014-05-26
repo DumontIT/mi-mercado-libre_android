@@ -1,8 +1,6 @@
 package com.nbempire.superml.service.impl;
 
-import android.content.Context;
 import android.content.SharedPreferences;
-import android.preference.PreferenceManager;
 import android.util.Log;
 import com.nbempire.superml.MainKeys;
 import com.nbempire.superml.dao.SiteDao;
@@ -33,9 +31,7 @@ public class SiteServiceImpl implements SiteService {
     private SiteDao siteDao = new SiteDaoImplSpring();
 
     @Override
-    public void loadSitesInformation(Context context) {
-        SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(context);
-
+    public void loadSitesInformation(SharedPreferences sharedPreferences) {
         JSONArray sitesArray = new JSONArray();
         String sitesIdsJson = sharedPreferences.getString(MainKeys.Keys.SITES, null);
         if (sitesIdsJson != null) {
