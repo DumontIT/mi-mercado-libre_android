@@ -1,5 +1,7 @@
 package com.nbempire.superml.domain;
 
+import java.io.Serializable;
+
 /**
  * TODO : Javadoc for
  * <p/>
@@ -8,7 +10,12 @@ package com.nbempire.superml.domain;
  * @author Nahuel Barrios <barrios.nahuel@gmail.com>.
  * @since 1.
  */
-public class Filter {
+public class Filter implements Serializable {
+
+    /**
+     * The serialVersionUID of this class.
+     */
+    private static final long serialVersionUID = 2080570034799102049L;
 
     private String id;
 
@@ -17,4 +24,32 @@ public class Filter {
     private String type;
 
     private Filter[] values;
+
+    private Filter[] path_from_root;
+
+    private Integer results;
+
+    public String getId() {
+        return id;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public String getType() {
+        return type;
+    }
+
+    public Filter[] getValues() {
+        return values;
+    }
+
+    public Filter[] getPath_from_root() {
+        return path_from_root;
+    }
+
+    public Integer getResults() {
+        return results;
+    }
 }

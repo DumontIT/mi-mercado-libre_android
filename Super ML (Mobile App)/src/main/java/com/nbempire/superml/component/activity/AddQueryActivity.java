@@ -5,8 +5,10 @@ import android.support.v7.app.ActionBarActivity;
 import android.util.Log;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
 import com.nbempire.superml.R;
-import com.nbempire.superml.adapter.CategoryAdapter;
+import com.nbempire.superml.adapter.FilterAdapter;
+import com.nbempire.superml.domain.Product;
 
 /**
  * Here the user will subscribe itself to a custom query to receive notifications about new articles.
@@ -26,22 +28,27 @@ public class AddQueryActivity extends ActionBarActivity {
     /**
      * Intent parameter.
      */
-    public static final String PARAMETER_QUERY = "query";
+    public static final String PARAMETER_PRODUCT = "product";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_query);
 
-        String query = getIntent().getStringExtra(PARAMETER_QUERY);
-        Log.i(TAG, "Creating activity for user query: " + query);
+        Product product = (Product) getIntent().getSerializableExtra(PARAMETER_PRODUCT);
+        if (product == null) {
+            Log.e(TAG, "An error ocurred while parsing the product. Can't load activity!!");
+            Toast.makeText(this, R.string.error_generic, Toast.LENGTH_SHORT).show();
+        } else {
+            Log.i(TAG, "Creating activity for user query: " + product.getQuery());
 
-        TextView introductionTextView = (TextView) findViewById(R.id.add_query_introduction_text);
-        introductionTextView.setText(String.format("%s %s", introductionTextView.getText(), query));
+            TextView introductionTextView = (TextView) findViewById(R.id.add_query_introduction_text);
+            introductionTextView.setText(String.format("%s %s", introductionTextView.getText(), product.getQuery()));
 
-        ListView categories = (ListView) findViewById(R.id.listView);
+            ListView categories = (ListView) findViewById(R.id.listView);
 
-        CategoryAdapter categoryAdapter = new CategoryAdapter(this);
-        categories.setAdapter(categoryAdapter);
+            FilterAdapter filterAdapter = new FilterAdapter(this);
+            categories.setAdapter(filterAdapter);
+        }
     }
 }

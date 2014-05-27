@@ -63,6 +63,8 @@ public class HomeActivity extends ActionBarActivity implements ActionBar.TabList
 
     private static SharedPreferences sharedPreferences;
 
+    private Product product;
+
     /**
      * The {@link android.support.v4.view.PagerAdapter} that will provide fragments for each of the sections. We use a {@link FragmentPagerAdapter}
      * derivative, which will keep every loaded fragment in memory. If this becomes too memory intensive, it may be best to switch to a {@link
@@ -366,7 +368,7 @@ public class HomeActivity extends ActionBarActivity implements ActionBar.TabList
         if (query.getText().toString().equals("")) {
             Toast.makeText(this, R.string.average_price_must_enter_query, Toast.LENGTH_SHORT).show();
         } else {
-            startActivity(new Intent(this, AddQueryActivity.class).putExtra(AddQueryActivity.PARAMETER_QUERY, query.getText().toString()));
+            startActivity(new Intent(this, AddQueryActivity.class).putExtra(AddQueryActivity.PARAMETER_PRODUCT, product));
         }
     }
 
@@ -386,6 +388,7 @@ public class HomeActivity extends ActionBarActivity implements ActionBar.TabList
             if (result == null) {
                 Toast.makeText(averagePrice.getContext(), R.string.error_generic, Toast.LENGTH_SHORT).show();
             } else {
+                product = result;
                 moneySymbol.setText(
                         sharedPreferences.getString(MainKeys.Keys.CURRENCY_ID_PREFFIX + result.getCurrencyId(), MainKeys.DEFAULT_CURRENCY_SYMBOL));
                 averagePrice.setText(String.valueOf(result.getAveragePrice()));
