@@ -432,13 +432,13 @@ public class HomeActivity extends ActionBarActivity implements ActionBar.TabList
             View view;
 
             if (convertView == null) {
-                view = layoutInflater.inflate(R.layout.abc_activity_chooser_view_list_item, parent, false);
+                view = layoutInflater.inflate(android.R.layout.simple_list_item_1, parent, false);
             } else {
                 view = convertView;
             }
 
             Query query = getItem(position);
-            ((TextView) view.findViewById(R.id.title)).setText(query.getText());
+            ((TextView) view.findViewById(android.R.id.text1)).setText(query.getText());
 
             return view;
         }
