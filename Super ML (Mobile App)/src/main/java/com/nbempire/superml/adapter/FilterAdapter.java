@@ -6,7 +6,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.TextView;
-import com.nbempire.superml.R;
 import com.nbempire.superml.domain.Filter;
 
 /**
@@ -34,13 +33,13 @@ public class FilterAdapter extends ArrayAdapter<Filter> {
         View view;
 
         if (convertView == null) {
-            view = layoutInflater.inflate(R.layout.abc_activity_chooser_view_list_item, parent, false);
+            view = layoutInflater.inflate(android.R.layout.simple_list_item_1, parent, false);
         } else {
             view = convertView;
         }
 
         Filter category = getItem(position);
-        ((TextView) view.findViewById(R.id.title)).setText(category.getName());
+        ((TextView) view.findViewById(android.R.id.text1)).setText(category.getName());
 
         return view;
     }
