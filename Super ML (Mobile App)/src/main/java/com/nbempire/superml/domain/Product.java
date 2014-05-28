@@ -97,4 +97,8 @@ public class Product implements Serializable {
     public AvailableFilter[] getAvailableFilters() {
         return availableFilters;
     }
+
+    public Category getCategory() {
+        return category;
+    }
 }

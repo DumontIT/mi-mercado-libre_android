@@ -17,5 +17,6 @@
     <string name="home_checking_ml_site">Estás en Mercado Libre</string>
     <string name="save">Guardar</string>
     <string name="add_query_introduction_text">Vas a recibir notificaciones de nuevas publicaciones para:</string>
+    <string name="category">Categoria:</string>
 
 </resources>

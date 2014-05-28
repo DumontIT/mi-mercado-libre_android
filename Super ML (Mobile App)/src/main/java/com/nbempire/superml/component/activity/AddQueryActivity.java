@@ -43,6 +43,9 @@ public class AddQueryActivity extends ActionBarActivity {
         } else {
             Log.i(TAG, "Creating activity for user query: " + product.getQuery());
 
+            TextView categoryLabel = (TextView) findViewById(R.id.addQuery_categoryLabel);
+            categoryLabel.setText(String.format("%1s %2s", categoryLabel.getText().toString(), product.getCategory().getName()));
+
             TextView introductionTextView = (TextView) findViewById(R.id.add_query_introduction_text);
             introductionTextView.setText(String.format("%s %s", introductionTextView.getText(), product.getQuery()));
 
