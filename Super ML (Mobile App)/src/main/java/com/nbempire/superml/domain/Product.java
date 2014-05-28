@@ -27,39 +27,74 @@ public class Product implements Serializable {
 
     private String currencyId;
 
-    private Filter[] filters;
+    private Category category;
 
-    private Filter[] availableFilters;
+    private AppliedFilter[] appliedFilters;
 
-    public int getAveragePrice() {
-        return averagePrice;
+    private AvailableFilter[] availableFilters;
+
+    public Product() {
+        this.appliedFilters = new AppliedFilter[]{};
+        this.availableFilters = new AvailableFilter[]{};
     }
 
-    public int getMinimumPrice() {
-        return minimumPrice;
-    }
-
-    public int getMaximumPrice() {
-        return maximumPrice;
-    }
-
-    public String getCurrencyId() {
-        return currencyId;
-    }
-
-    public Filter[] getFilters() {
-        return filters;
-    }
-
-    public Filter[] getAvailableFilters() {
-        return availableFilters;
+    public String getQuery() {
+        return query;
     }
 
     public void setQuery(String query) {
         this.query = query;
     }
 
-    public String getQuery() {
-        return query;
+    public int getAveragePrice() {
+        return averagePrice;
+    }
+
+    public void setAveragePrice(int averagePrice) {
+        this.averagePrice = averagePrice;
+    }
+
+    public int getMinimumPrice() {
+        return minimumPrice;
+    }
+
+    public void setMinimumPrice(int minimumPrice) {
+        this.minimumPrice = minimumPrice;
+    }
+
+    public int getMaximumPrice() {
+        return maximumPrice;
+    }
+
+    public void setMaximumPrice(int maximumPrice) {
+        this.maximumPrice = maximumPrice;
+    }
+
+    public String getCurrencyId() {
+        return currencyId;
+    }
+
+    public void setCurrencyId(String currencyId) {
+        this.currencyId = currencyId;
+    }
+
+    public void setCategory(Category category) {
+        this.category = category;
+    }
+
+    public AppliedFilter[] getAppliedFilters() {
+        return appliedFilters;
+    }
+
+    public void setAppliedFilters(AppliedFilter[] appliedFilters) {
+        this.appliedFilters = appliedFilters;
+    }
+
+    public void setAvailableFilters(AvailableFilter[] availableFilters) {
+        this.availableFilters = availableFilters;
+    }
+
+    public AvailableFilter[] getAvailableFilters() {
+        return availableFilters;
     }
 }

@@ -8,6 +8,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 import com.nbempire.superml.R;
 import com.nbempire.superml.adapter.FilterAdapter;
+import com.nbempire.superml.domain.AvailableFilter;
 import com.nbempire.superml.domain.Product;
 
 /**
@@ -49,6 +50,10 @@ public class AddQueryActivity extends ActionBarActivity {
 
             FilterAdapter filterAdapter = new FilterAdapter(this);
             categories.setAdapter(filterAdapter);
+
+            for (AvailableFilter eachFilter : product.getAvailableFilters()) {
+                filterAdapter.add(eachFilter);
+            }
         }
     }
 }

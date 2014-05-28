@@ -17,17 +17,18 @@ public class Filter implements Serializable {
      */
     private static final long serialVersionUID = 2080570034799102049L;
 
-    private String id;
+    protected String id;
 
-    private String name;
+    protected String name;
 
-    private String type;
+    public Filter(String id, String name) {
+        this.id = id;
+        this.name = name;
+    }
 
-    private Filter[] values;
-
-    private Filter[] path_from_root;
-
-    private Integer results;
+    public Filter(String id, String name, Filter appliedFilter) {
+        this(id, name);
+    }
 
     public String getId() {
         return id;
@@ -35,21 +36,5 @@ public class Filter implements Serializable {
 
     public String getName() {
         return name;
-    }
-
-    public String getType() {
-        return type;
-    }
-
-    public Filter[] getValues() {
-        return values;
-    }
-
-    public Filter[] getPath_from_root() {
-        return path_from_root;
-    }
-
-    public Integer getResults() {
-        return results;
     }
 }
