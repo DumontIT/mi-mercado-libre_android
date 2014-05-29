@@ -64,10 +64,30 @@
         android:layout_height="wrap_content"
         android:text="@string/moneySymbol"
         android:id="@+id/homeMoneySymbol"
-        android:layout_centerVertical="true"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true"
         android:textSize="@dimen/money_symbol_size"
-        android:visibility="invisible" />
+        android:visibility="invisible"
+        android:layout_below="@+id/homeSearchButton"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true" />
 
+    <Button
+        style="?android:attr/buttonStyleSmall"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/save"
+        android:id="@+id/saveQueryButton"
+        android:onClick="saveQuery"
+        android:visibility="invisible"
+        android:layout_above="@+id/homeCountryLabel"
+        android:layout_alignRight="@+id/homeSearchButton"
+        android:layout_alignEnd="@+id/homeSearchButton" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceSmall"
+        android:id="@+id/homeCountryLabel"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentEnd="true" />
 </RelativeLayout>

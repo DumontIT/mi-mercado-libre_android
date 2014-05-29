@@ -7,6 +7,9 @@ import android.content.IntentFilter;
 import android.content.SharedPreferences;
 import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageManager;
+import android.content.res.Resources;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
@@ -27,15 +30,20 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
+import com.nbempire.superml.MainKeys;
 import com.nbempire.superml.R;
-import com.nbempire.superml.domain.Category;
 import com.nbempire.superml.domain.Product;
+import com.nbempire.superml.domain.Query;
+import com.nbempire.superml.domain.Site;
 import com.nbempire.superml.service.ProductService;
+import com.nbempire.superml.service.SiteService;
 import com.nbempire.superml.service.impl.ProductServiceImpl;
+import com.nbempire.superml.service.impl.SiteServiceImpl;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -51,19 +59,21 @@ public class HomeActivity extends ActionBarActivity implements ActionBar.TabList
 
     private static ProductService productService = new ProductServiceImpl();
 
-    private SharedPreferences sharedPreferences;
+    private SiteService siteService = new SiteServiceImpl();
+
+    private static SharedPreferences sharedPreferences;
 
     /**
      * The {@link android.support.v4.view.PagerAdapter} that will provide fragments for each of the sections. We use a {@link FragmentPagerAdapter}
      * derivative, which will keep every loaded fragment in memory. If this becomes too memory intensive, it may be best to switch to a {@link
      * android.support.v4.app.FragmentStatePagerAdapter}.
      */
-    private SectionsPagerAdapter mSectionsPagerAdapter;
+    private SectionsPagerAdapter sectionsPagerAdapter;
 
     /**
      * The {@link ViewPager} that will host the section contents.
      */
-    private ViewPager mViewPager;
+    private ViewPager viewPager;
 
     private static EditText query;
 
@@ -75,24 +85,41 @@ public class HomeActivity extends ActionBarActivity implements ActionBar.TabList
 
     private static TextView moneySymbol;
 
+    private static TextView countryLabel;
+
+    private static Button saveQueryButton;
+
+    SharedPreferences.OnSharedPreferenceChangeListener onSharedPreferenceChangeListener = new SharedPreferences.OnSharedPreferenceChangeListener() {
+        @Override
+        public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String key) {
+            if (key.equals(MainKeys.Keys.CURRENT_COUNTRY)) {
+                countryLabel.setText(generateCurrentCountryLabel(getBaseContext()));
+            }
+        }
+    };
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home);
+
+        sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
+        sharedPreferences.registerOnSharedPreferenceChangeListener(onSharedPreferenceChangeListener);
+        loadGeneralDataFromServer();
 
         // Set up the action bar.
         final ActionBar actionBar = getSupportActionBar();
         actionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_TABS);
 
         // Create the adapter that will return a fragment for each of the three primary sections of the activity.
-        mSectionsPagerAdapter = new SectionsPagerAdapter(getSupportFragmentManager());
+        sectionsPagerAdapter = new SectionsPagerAdapter(getSupportFragmentManager());
 
         // Set up the ViewPager with the sections adapter.
-        mViewPager = (ViewPager) findViewById(R.id.pager);
-        mViewPager.setAdapter(mSectionsPagerAdapter);
+        viewPager = (ViewPager) findViewById(R.id.pager);
+        viewPager.setAdapter(sectionsPagerAdapter);
 
         // When swiping between different sections, select the corresponding tab. We can also use ActionBar.Tab#select() to do this if we have a reference to the Tab.
-        mViewPager.setOnPageChangeListener(new ViewPager.SimpleOnPageChangeListener() {
+        viewPager.setOnPageChangeListener(new ViewPager.SimpleOnPageChangeListener() {
             @Override
             public void onPageSelected(int position) {
                 actionBar.setSelectedNavigationItem(position);
@@ -100,13 +127,58 @@ public class HomeActivity extends ActionBarActivity implements ActionBar.TabList
         });
 
         // For each of the sections in the app, add a tab to the action bar.
-        for (int i = 0; i < mSectionsPagerAdapter.getCount(); i++) {
+        for (int i = 0; i < sectionsPagerAdapter.getCount(); i++) {
             // Create a tab with text corresponding to the page title defined by the adapter. Also specify this Activity object, which implements the
             // TabListener interface, as the callback (listener) for when this tab is selected.
-            actionBar.addTab(actionBar.newTab().setText(mSectionsPagerAdapter.getPageTitle(i)).setTabListener(this));
+            actionBar.addTab(actionBar.newTab().setText(sectionsPagerAdapter.getPageTitle(i)).setTabListener(this));
+        }
+    }
+
+    private static String generateCurrentCountryLabel(Context context) {
+        String choosenCountry =
+                getEntryForListPreferenceValue(context, sharedPreferences.getString(MainKeys.Keys.CURRENT_COUNTRY, MainKeys.DEFAULT_COUNTRY_ID),
+                                               R.array.pref_countries_values, R.array.pref_countries_entries);
+        return String.format("%s %s", context.getText(R.string.home_checking_ml_site), choosenCountry);
+    }
+
+    /**
+     * Get selected setting entry (the label) for a specified ListPreference entries-values pair.
+     *
+     * @param settingValue
+     *         The setting stored value. You can get that value by doing sharedPreferences.getString({keyName}, "defaultValue").
+     * @param valuesResourceId
+     *         Resource ID for the string array resource where to look for the specified {@code settingValue}. This resource is set in ListPreference
+     *         definition.
+     * @param entriesResourceId
+     *         Resource ID that contains entries for the specified {@code valuesResourceId}.
+     *
+     * @return The corresponding entry for the specified {@code settingValue}.
+     */
+    private static String getEntryForListPreferenceValue(Context context, String settingValue, int valuesResourceId, int entriesResourceId) {
+        //  TODO : Refactor :  Extract this method to some helper class or something similar.
+        Resources resources = context.getResources();
+
+        String[] values = resources.getStringArray(valuesResourceId);
+        int index;
+        for (index = 0; index < values.length; index++) {
+            String eachKey = values[index];
+            if (eachKey.equals(settingValue)) {
+                break;
+            }
         }
 
-        sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
+        return resources.getStringArray(entriesResourceId)[index == values.length ? index - 1 : index];
+    }
+
+    private void loadGeneralDataFromServer() {
+        //  TODO : We should NOT run this on every app start.
+        ConnectivityManager cm = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
+
+        NetworkInfo activeNetwork = cm.getActiveNetworkInfo();
+        boolean isConnected = activeNetwork != null && activeNetwork.isConnectedOrConnecting();
+        if (isConnected) {
+            new LoadSitesInfoAsyncTask().execute(sharedPreferences);
+        }
     }
 
 
@@ -135,7 +207,7 @@ public class HomeActivity extends ActionBarActivity implements ActionBar.TabList
     public void onTabSelected(ActionBar.Tab tab, FragmentTransaction fragmentTransaction) {
         // When the given tab is selected, switch to the corresponding page in
         // the ViewPager.
-        mViewPager.setCurrentItem(tab.getPosition());
+        viewPager.setCurrentItem(tab.getPosition());
     }
 
     @Override
@@ -157,8 +229,7 @@ public class HomeActivity extends ActionBarActivity implements ActionBar.TabList
 
         @Override
         public Fragment getItem(int position) {
-            // getItem is called to instantiate the fragment for the given page.
-            // Return a PlaceholderFragment (defined as a static inner class below).
+            // getItem is called to instantiate the fragment for the given page. Return a PlaceholderFragment (defined as a static inner class below).
             return PlaceholderFragment.newInstance(position + 1);
         }
 
@@ -189,43 +260,36 @@ public class HomeActivity extends ActionBarActivity implements ActionBar.TabList
      */
     public static class PlaceholderFragment extends Fragment {
 
-        private int sectionNumer;
-
         /**
          * The fragment argument representing the section number for this fragment.
          */
-        private static final String ARG_SECTION_NUMBER = "section_number";
+        private static final String ARG_SECTION_NUMBER = "sectionNumber";
 
         /**
          * Returns a new instance of this fragment for the given section number.
          */
         public static PlaceholderFragment newInstance(int sectionNumber) {
-            PlaceholderFragment fragment = new PlaceholderFragment(sectionNumber);
-            Bundle args = new Bundle();
-            args.putInt(ARG_SECTION_NUMBER, sectionNumber);
-            fragment.setArguments(args);
+            PlaceholderFragment fragment = new PlaceholderFragment();
+            Bundle arguments = new Bundle();
+            arguments.putInt(ARG_SECTION_NUMBER, sectionNumber);
+            fragment.setArguments(arguments);
             return fragment;
-        }
-
-
-        public PlaceholderFragment() {
-        }
-
-        public PlaceholderFragment(int sectionNumer) {
-            this.sectionNumer = sectionNumer;
         }
 
         @Override
         public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+            int sectionNumber = this.getArguments().getInt(ARG_SECTION_NUMBER);
+            Log.d(TAG, "Creating fragment view for sectionNumber: " + sectionNumber);
+
             int fragmentLayoutId = R.layout.fragment_average_price;
 
-            switch (sectionNumer) {
+            switch (sectionNumber) {
                 case 2:
                     fragmentLayoutId = R.layout.fragment_my_queries;
             }
             View createdLayoutView = inflater.inflate(fragmentLayoutId, container, false);
 
-            switch (sectionNumer) {
+            switch (sectionNumber) {
                 case 1:
                     onCreateViewForAveragePriceFragment(createdLayoutView);
                     break;
@@ -242,31 +306,35 @@ public class HomeActivity extends ActionBarActivity implements ActionBar.TabList
             minimumPrice = (TextView) container.findViewById(R.id.homeMinimumPrice);
             maximumPrice = (TextView) container.findViewById(R.id.homeMaximumPrice);
             moneySymbol = (TextView) container.findViewById(R.id.homeMoneySymbol);
+            countryLabel = (TextView) container.findViewById(R.id.homeCountryLabel);
+            saveQueryButton = (Button) container.findViewById(R.id.saveQueryButton);
+
+            countryLabel.setText(generateCurrentCountryLabel(container.getContext()));
         }
 
         private void onCreateViewForMyQueriesFragment(final View container) {
-            final ListView categories = (ListView) container.findViewById(R.id.listView);
+            final ListView myQueries = (ListView) container.findViewById(R.id.listView);
 
-            final CategoryAdapter mAdapter = new CategoryAdapter(container.getContext());
-            categories.setAdapter(mAdapter);
+            final MyQueriesAdapter myQueriesAdapter = new MyQueriesAdapter(container.getContext());
+            myQueries.setAdapter(myQueriesAdapter);
 
             // Prepare the loader.  Either re-connect with an existing one, or start a new one.
-            getLoaderManager().initLoader(0, null, new LoaderManager.LoaderCallbacks<List<Category>>() {
+            getLoaderManager().initLoader(0, null, new LoaderManager.LoaderCallbacks<List<Query>>() {
                 @Override
-                public Loader<List<Category>> onCreateLoader(int id, Bundle args) {
-                    return new CategoryListLoader(container.getContext());
+                public Loader<List<Query>> onCreateLoader(int id, Bundle args) {
+                    return new QueryListLoader(container.getContext());
                 }
 
                 @Override
-                public void onLoadFinished(Loader<List<Category>> loader, List<Category> data) {
+                public void onLoadFinished(Loader<List<Query>> loader, List<Query> data) {
                     // Set the new data in the adapter.
-                    mAdapter.setData(data);
+                    myQueriesAdapter.setData(data);
                 }
 
                 @Override
-                public void onLoaderReset(Loader<List<Category>> loader) {
+                public void onLoaderReset(Loader<List<Query>> loader) {
                     // Clear the data in the adapter.
-                    mAdapter.setData(null);
+                    myQueriesAdapter.setData(null);
                 }
             });
         }
@@ -279,15 +347,26 @@ public class HomeActivity extends ActionBarActivity implements ActionBar.TabList
     }
 
     public void searchAveragePrice(View view) {
+        Log.d(TAG, "View average price button pressed");
         Log.i(TAG, "Searching product: " + query.getText());
 
         if (query.getText().toString().equals("")) {
             Toast.makeText(this, R.string.average_price_must_enter_query, Toast.LENGTH_SHORT).show();
         } else {
-            updateViewsVisibility(View.INVISIBLE, new View[]{averagePrice, minimumPrice, maximumPrice, moneySymbol});
+            updateViewsVisibility(View.INVISIBLE, new View[]{averagePrice, minimumPrice, maximumPrice, moneySymbol, saveQueryButton});
 
-            //  TODO : Extract "MLA" default hard-coding to MainKeys or something similar.
-            new CallSuperMLApiAsyncTask().execute(sharedPreferences.getString("country", "MLA"), query.getText().toString());
+            String currentSite = sharedPreferences.getString(MainKeys.Keys.CURRENT_COUNTRY, MainKeys.DEFAULT_COUNTRY_ID);
+            new FindProductAsyncTask().execute(currentSite, query.getText().toString());
+        }
+    }
+
+    public void saveQuery(View view) {
+        Log.d(TAG, "Save query button pressed.");
+
+        if (query.getText().toString().equals("")) {
+            Toast.makeText(this, R.string.average_price_must_enter_query, Toast.LENGTH_SHORT).show();
+        } else {
+            startActivity(new Intent(this, AddQueryActivity.class).putExtra(AddQueryActivity.PARAMETER_QUERY, query.getText().toString()));
         }
     }
 
@@ -295,7 +374,7 @@ public class HomeActivity extends ActionBarActivity implements ActionBar.TabList
      * AsyncTask that calls server to find a specified product's average price. This way of calling a REST API is required in newewst Android
      * versions.
      */
-    private class CallSuperMLApiAsyncTask extends AsyncTask<String, Boolean, Product> {
+    private class FindProductAsyncTask extends AsyncTask<String, Boolean, Product> {
 
         @Override
         protected Product doInBackground(String... params) {
@@ -307,29 +386,40 @@ public class HomeActivity extends ActionBarActivity implements ActionBar.TabList
             if (result == null) {
                 Toast.makeText(averagePrice.getContext(), R.string.error_generic, Toast.LENGTH_SHORT).show();
             } else {
+                moneySymbol.setText(
+                        sharedPreferences.getString(MainKeys.Keys.CURRENCY_ID_PREFFIX + result.getCurrencyId(), MainKeys.DEFAULT_CURRENCY_SYMBOL));
                 averagePrice.setText(String.valueOf(result.getAveragePrice()));
                 minimumPrice.setText(String.valueOf(result.getMinimumPrice()));
                 maximumPrice.setText(String.valueOf(result.getMaximumPrice()));
 
-                updateViewsVisibility(View.VISIBLE, new View[]{averagePrice, minimumPrice, maximumPrice, moneySymbol});
+                updateViewsVisibility(View.VISIBLE, new View[]{averagePrice, minimumPrice, maximumPrice, moneySymbol, saveQueryButton});
             }
         }
     }
 
-    public static class CategoryAdapter extends ArrayAdapter<Category> {
+    private class LoadSitesInfoAsyncTask extends AsyncTask<SharedPreferences, Boolean, List<Site>> {
+
+        @Override
+        protected List<Site> doInBackground(SharedPreferences... params) {
+            siteService.loadSitesInformation(params[0]);
+            return null;
+        }
+    }
+
+    public static class MyQueriesAdapter extends ArrayAdapter<Query> {
 
         private final LayoutInflater layoutInflater;
 
-        public CategoryAdapter(Context context) {
+        public MyQueriesAdapter(Context context) {
             super(context, android.R.layout.simple_list_item_1);
             layoutInflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         }
 
-        public void setData(List<Category> data) {
+        public void setData(List<Query> data) {
             clear();
             if (data != null) {
-                for (Category eachCategory : data) {
-                    add(eachCategory);
+                for (Query eachQuery : data) {
+                    add(eachQuery);
                 }
             }
         }
@@ -342,13 +432,13 @@ public class HomeActivity extends ActionBarActivity implements ActionBar.TabList
             View view;
 
             if (convertView == null) {
-                view = layoutInflater.inflate(R.layout.abc_activity_chooser_view_list_item, parent, false);
+                view = layoutInflater.inflate(android.R.layout.simple_list_item_1, parent, false);
             } else {
                 view = convertView;
             }
 
-            Category category = getItem(position);
-            ((TextView) view.findViewById(R.id.title)).setText(category.getName());
+            Query query = getItem(position);
+            ((TextView) view.findViewById(android.R.id.text1)).setText(query.getText());
 
             return view;
         }
@@ -359,9 +449,9 @@ public class HomeActivity extends ActionBarActivity implements ActionBar.TabList
      */
     public static class PackageIntentReceiver extends BroadcastReceiver {
 
-        final CategoryListLoader mLoader;
+        final QueryListLoader mLoader;
 
-        public PackageIntentReceiver(CategoryListLoader loader) {
+        public PackageIntentReceiver(QueryListLoader loader) {
             mLoader = loader;
             IntentFilter filter = new IntentFilter(Intent.ACTION_PACKAGE_ADDED);
             filter.addAction(Intent.ACTION_PACKAGE_REMOVED);
@@ -385,15 +475,15 @@ public class HomeActivity extends ActionBarActivity implements ActionBar.TabList
     /**
      * A custom Loader that loads all of the installed applications.
      */
-    public static class CategoryListLoader extends AsyncTaskLoader<List<Category>> {
+    public static class QueryListLoader extends AsyncTaskLoader<List<Query>> {
 
         private final PackageManager packageManager;
 
-        private List<Category> categories;
+        private List<Query> categories;
 
         private PackageIntentReceiver packageIntentReceiver;
 
-        public CategoryListLoader(Context context) {
+        public QueryListLoader(Context context) {
             super(context);
 
             // Retrieve the package manager for later use; note we don't use 'context' directly but instead the save global application context returned by getContext().
@@ -405,7 +495,7 @@ public class HomeActivity extends ActionBarActivity implements ActionBar.TabList
          * published by the loader.
          */
         @Override
-        public List<Category> loadInBackground() {
+        public List<Query> loadInBackground() {
             // Retrieve all known applications.
             List<ApplicationInfo> apps = packageManager.getInstalledApplications(
                     PackageManager.GET_UNINSTALLED_PACKAGES |
@@ -415,15 +505,15 @@ public class HomeActivity extends ActionBarActivity implements ActionBar.TabList
                 apps = new ArrayList<ApplicationInfo>();
             }
 
-            // Create corresponding array of categories and load their labels.
-            List<Category> categories = new ArrayList<Category>(apps.size());
+            // Create corresponding array of queries and load their labels.
+            List<Query> queries = new ArrayList<Query>(apps.size());
             for (ApplicationInfo app : apps) {
                 if (app.className != null && !app.className.equals("")) {
-                    categories.add(new Category(app.className));
+                    queries.add(new Query(app.className));
                 }
             }
 
-            return categories;
+            return queries;
         }
 
         /**
@@ -431,7 +521,7 @@ public class HomeActivity extends ActionBarActivity implements ActionBar.TabList
          * a little more logic.
          */
         @Override
-        public void deliverResult(List<Category> data) {
+        public void deliverResult(List<Query> data) {
             if (isReset()) {
                 // An async query came in while the loader is stopped.  We don't need the result.
                 if (data != null) {
@@ -439,7 +529,7 @@ public class HomeActivity extends ActionBarActivity implements ActionBar.TabList
                 }
             }
 
-            List<Category> oldApps = data;
+            List<Query> oldApps = data;
             categories = data;
 
             if (isStarted()) {
@@ -488,7 +578,7 @@ public class HomeActivity extends ActionBarActivity implements ActionBar.TabList
          * Handles a request to cancel a load.
          */
         @Override
-        public void onCanceled(List<Category> data) {
+        public void onCanceled(List<Query> data) {
             super.onCanceled(data);
 
             // At this point we can release the resources associated with 'data' if needed.
@@ -521,7 +611,7 @@ public class HomeActivity extends ActionBarActivity implements ActionBar.TabList
         /**
          * Helper function to take care of releasing resources associated with an actively loaded data set.
          */
-        protected void onReleaseResources(List<Category> apps) {
+        protected void onReleaseResources(List<Query> apps) {
             // For a simple List<> there is nothing to do.  For something like a Cursor, we would close it here.
         }
     }

@@ -1,9 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-    <string name="app_name">Super ML</string>
+    <string name="app_name">Mi Mercado Libre</string>
+
     <string name="title_section_average_price">Precio Promedio</string>
     <string name="title_section_my_queries">Mis Búsquedas</string>
+    <string name="title_activity_add_query">Agregar producto</string>
+
     <string name="action_settings">Configuración</string>
     <string name="query_label">¿Qué estas buscando?</string>
     <string name="search_button_label">Ver Precio Promedio</string>
@@ -11,5 +14,8 @@
     <string name="section_my_query_help_text">Elegí una categoría para encontrar las mejores publicaciones</string>
     <string name="average_price_must_enter_query">Debe ingresar un producto</string>
     <string name="error_generic">Ocurrió un error, intente de nuevo más tarde</string>
+    <string name="home_checking_ml_site">Estás en Mercado Libre</string>
+    <string name="save">Guardar</string>
+    <string name="add_query_introduction_text">Agregando busqueda:</string>
 
 </resources>

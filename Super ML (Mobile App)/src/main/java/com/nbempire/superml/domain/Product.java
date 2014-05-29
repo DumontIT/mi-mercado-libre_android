@@ -16,6 +16,8 @@ public class Product {
 
     private int maximumPrice;
 
+    private String currencyId;
+
     public int getAveragePrice() {
         return averagePrice;
     }
@@ -26,5 +28,9 @@ public class Product {
 
     public int getMaximumPrice() {
         return maximumPrice;
+    }
+
+    public String getCurrencyId() {
+        return currencyId;
     }
 }
