@@ -79,6 +79,8 @@ public class HomeActivity extends ActionBarActivity implements ActionBar.TabList
 
     private static EditText query;
 
+    private static TextView categoryLabel;
+
     private static TextView averagePrice;
 
     private static TextView minimumPrice;
@@ -304,6 +306,7 @@ public class HomeActivity extends ActionBarActivity implements ActionBar.TabList
 
         private void onCreateViewForAveragePriceFragment(View container) {
             query = (EditText) container.findViewById(R.id.homeSearchQuery);
+            categoryLabel = (TextView) container.findViewById(R.id.homeCategoryLabel);
             averagePrice = (TextView) container.findViewById(R.id.homeAveragePrice);
             minimumPrice = (TextView) container.findViewById(R.id.homeMinimumPrice);
             maximumPrice = (TextView) container.findViewById(R.id.homeMaximumPrice);
@@ -355,7 +358,7 @@ public class HomeActivity extends ActionBarActivity implements ActionBar.TabList
         if (query.getText().toString().equals("")) {
             Toast.makeText(this, R.string.average_price_must_enter_query, Toast.LENGTH_SHORT).show();
         } else {
-            updateViewsVisibility(View.INVISIBLE, new View[]{averagePrice, minimumPrice, maximumPrice, moneySymbol, saveQueryButton});
+            updateViewsVisibility(View.INVISIBLE, new View[]{averagePrice, minimumPrice, maximumPrice, moneySymbol, saveQueryButton, categoryLabel});
 
             String currentSite = sharedPreferences.getString(MainKeys.Keys.CURRENT_COUNTRY, MainKeys.DEFAULT_COUNTRY_ID);
             new FindProductAsyncTask().execute(currentSite, query.getText().toString());
@@ -391,11 +394,13 @@ public class HomeActivity extends ActionBarActivity implements ActionBar.TabList
                 product = result;
                 moneySymbol.setText(
                         sharedPreferences.getString(MainKeys.Keys.CURRENCY_ID_PREFFIX + result.getCurrencyId(), MainKeys.DEFAULT_CURRENCY_SYMBOL));
+                categoryLabel.setText(String.format("%s %s", getText(R.string.category), result.getCategory().getName()));
                 averagePrice.setText(String.valueOf(result.getAveragePrice()));
                 minimumPrice.setText(String.valueOf(result.getMinimumPrice()));
                 maximumPrice.setText(String.valueOf(result.getMaximumPrice()));
 
-                updateViewsVisibility(View.VISIBLE, new View[]{averagePrice, minimumPrice, maximumPrice, moneySymbol, saveQueryButton});
+                updateViewsVisibility(View.VISIBLE,
+                                      new View[]{averagePrice, minimumPrice, maximumPrice, moneySymbol, saveQueryButton, categoryLabel});
             }
         }
     }
