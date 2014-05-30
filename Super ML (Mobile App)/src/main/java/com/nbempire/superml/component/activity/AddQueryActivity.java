@@ -75,9 +75,9 @@ public class AddQueryActivity extends ActionBarActivity {
                     new String[]{"ROOT_NAME"},
                     new int[]{android.R.id.text1},
                     listOfChildGroups,
-                    android.R.layout.simple_expandable_list_item_2,
+                    R.layout.list_item_checkbox,
                     new String[]{"CHILD_NAME"},
-                    new int[]{android.R.id.text1}
+                    new int[]{R.id.list_item_checkbox}
             );
 
             categories.setAdapter(adapter);
