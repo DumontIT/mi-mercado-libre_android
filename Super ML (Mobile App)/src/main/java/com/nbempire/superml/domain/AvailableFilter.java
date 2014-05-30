@@ -32,4 +32,8 @@ public class AvailableFilter extends Filter {
     public AvailableFilter[] getPossibleValues() {
         return possibleValues;
     }
+
+    public Integer getResults() {
+        return results;
+    }
 }

@@ -34,7 +34,10 @@ public class ProductServiceImpl implements ProductService {
         AvailableFilter selectedFilter = findFilterByName(product, category);
 
         List<AvailableFilter> filters = new ArrayList<AvailableFilter>();
-        Collections.addAll(filters, selectedFilter.getPossibleValues());
+
+        if (selectedFilter != null) {
+            Collections.addAll(filters, selectedFilter.getPossibleValues());
+        }
 
         return filters;
     }

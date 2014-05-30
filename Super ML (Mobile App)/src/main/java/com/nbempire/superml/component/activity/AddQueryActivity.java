@@ -73,7 +73,7 @@ public class AddQueryActivity extends ActionBarActivity {
             categories.setOnItemClickListener(new AdapterView.OnItemClickListener() {
                 @Override
                 public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                    TextView categoryTextView = (TextView) view;
+                    TextView categoryTextView = (TextView) view.findViewById(R.id.label);
                     updateFilters(categoryTextView.getText().toString());
                 }
             });
