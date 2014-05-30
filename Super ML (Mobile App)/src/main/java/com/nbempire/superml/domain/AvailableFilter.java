@@ -15,7 +15,7 @@ public class AvailableFilter extends Filter {
      */
     private static final long serialVersionUID = -1107769475924997735L;
 
-    private Filter[] possibleValues;
+    private AvailableFilter[] possibleValues;
 
     private Integer results;
 
@@ -27,5 +27,9 @@ public class AvailableFilter extends Filter {
     public AvailableFilter(String id, String name, AvailableFilter[] possibleValues) {
         super(id, name);
         this.possibleValues = possibleValues;
+    }
+
+    public AvailableFilter[] getPossibleValues() {
+        return possibleValues;
     }
 }

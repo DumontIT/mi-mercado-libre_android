@@ -1,6 +1,9 @@
 package com.nbempire.superml.service;
 
+import com.nbempire.superml.domain.AvailableFilter;
 import com.nbempire.superml.domain.Product;
+
+import java.util.List;
 
 /**
  * TODO : Javadoc for
@@ -23,4 +26,6 @@ public interface ProductService {
      * @return The average price.
      */
     Product findByQuery(String siteId, String query);
+
+    List<AvailableFilter> getSubcategories(Product product, String category);
 }

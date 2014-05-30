@@ -2,8 +2,13 @@ package com.nbempire.superml.service.impl;
 
 import com.nbempire.superml.dao.ProductDao;
 import com.nbempire.superml.dao.impl.ProductDaoImplSpring;
+import com.nbempire.superml.domain.AvailableFilter;
 import com.nbempire.superml.domain.Product;
 import com.nbempire.superml.service.ProductService;
+
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
 
 /**
  * TODO : Javadoc for
@@ -22,5 +27,26 @@ public class ProductServiceImpl implements ProductService {
         Product product = productDao.findByQuery(siteId, query);
         product.setQuery(query);
         return product;
+    }
+
+    @Override
+    public List<AvailableFilter> getSubcategories(Product product, String category) {
+        AvailableFilter selectedFilter = findFilterByName(product, category);
+
+        List<AvailableFilter> filters = new ArrayList<AvailableFilter>();
+        Collections.addAll(filters, selectedFilter.getPossibleValues());
+
+        return filters;
+    }
+
+    private AvailableFilter findFilterByName(Product product, String category) {
+        AvailableFilter result = null;
+
+        for (AvailableFilter eachAvailableFilter : product.getAvailableFilters()) {
+            if (eachAvailableFilter.getName().equals(category)) {
+                result = eachAvailableFilter;
+            }
+        }
+        return result;
     }
 }
