@@ -3,9 +3,8 @@ package com.nbempire.superml.component.activity;
 import android.os.Bundle;
 import android.support.v7.app.ActionBarActivity;
 import android.util.Log;
-import android.view.View;
-import android.widget.AdapterView;
-import android.widget.ListView;
+import android.widget.ExpandableListView;
+import android.widget.SimpleExpandableListAdapter;
 import android.widget.TextView;
 import android.widget.Toast;
 import com.nbempire.superml.R;
@@ -15,7 +14,10 @@ import com.nbempire.superml.domain.Product;
 import com.nbempire.superml.service.ProductService;
 import com.nbempire.superml.service.impl.ProductServiceImpl;
 
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * Here the user will subscribe itself to a custom query to receive notifications about new articles.
@@ -61,23 +63,55 @@ public class AddQueryActivity extends ActionBarActivity {
             TextView introductionTextView = (TextView) findViewById(R.id.add_query_introduction_text);
             introductionTextView.setText(String.format("%s %s", introductionTextView.getText(), product.getQuery()));
 
-            ListView categories = (ListView) findViewById(R.id.listView);
+            ExpandableListView categories = (ExpandableListView) findViewById(R.id.listView);
 
-            filterAdapter = new FilterAdapter(this);
-            categories.setAdapter(filterAdapter);
+            List<Map<String, String>> groupData = generateExpandableListViewGroupsData(product.getAvailableFilters());
+            List<List<Map<String, String>>> listOfChildGroups = generateExpandableListViewChildrenData(product.getAvailableFilters());
 
-            for (AvailableFilter eachFilter : product.getAvailableFilters()) {
-                filterAdapter.add(eachFilter);
+            SimpleExpandableListAdapter adapter = new SimpleExpandableListAdapter(
+                    this,
+                    groupData,
+                    android.R.layout.simple_expandable_list_item_1,
+                    new String[]{"ROOT_NAME"},
+                    new int[]{android.R.id.text1},
+                    listOfChildGroups,
+                    android.R.layout.simple_expandable_list_item_2,
+                    new String[]{"CHILD_NAME"},
+                    new int[]{android.R.id.text1}
+            );
+
+            categories.setAdapter(adapter);
+        }
+    }
+
+    private List<Map<String, String>> generateExpandableListViewGroupsData(AvailableFilter[] availableFilters) {
+        List<Map<String, String>> groups = new ArrayList<Map<String, String>>();
+
+        for (AvailableFilter eachAvailableFilter : availableFilters) {
+            Map<String, String> groupFields = new HashMap<String, String>();
+            groupFields.put("ROOT_NAME", eachAvailableFilter.getName());
+            groups.add(groupFields);
+        }
+
+        return groups;
+    }
+
+    private List<List<Map<String, String>>> generateExpandableListViewChildrenData(AvailableFilter[] availableFilters) {
+        List<List<Map<String, String>>> availableFiltersValues = new ArrayList<List<Map<String, String>>>();
+
+        for (AvailableFilter eachAvailableFilter : availableFilters) {
+            List<Map<String, String>> possibleValues = new ArrayList<Map<String, String>>();
+
+            for (AvailableFilter eachPossibleValue : eachAvailableFilter.getPossibleValues()) {
+                Map<String, String> eachChildFields = new HashMap<String, String>();
+                eachChildFields.put("CHILD_NAME", eachPossibleValue.getName());
+                possibleValues.add(eachChildFields);
             }
 
-            categories.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-                @Override
-                public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                    TextView categoryTextView = (TextView) view.findViewById(R.id.label);
-                    updateFilters(categoryTextView.getText().toString());
-                }
-            });
+            availableFiltersValues.add(possibleValues);
         }
+
+        return availableFiltersValues;
     }
 
     private void updateFilters(String selectedText) {
