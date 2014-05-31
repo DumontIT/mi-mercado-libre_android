@@ -8,7 +8,6 @@ import android.widget.SimpleExpandableListAdapter;
 import android.widget.TextView;
 import android.widget.Toast;
 import com.nbempire.superml.R;
-import com.nbempire.superml.adapter.FilterAdapter;
 import com.nbempire.superml.domain.AvailableFilter;
 import com.nbempire.superml.domain.Product;
 import com.nbempire.superml.service.ProductService;
@@ -38,8 +37,6 @@ public class AddQueryActivity extends ActionBarActivity {
      * Intent parameter.
      */
     public static final String PARAMETER_PRODUCT = "product";
-
-    private FilterAdapter filterAdapter;
 
     private Product product;
 
@@ -112,16 +109,5 @@ public class AddQueryActivity extends ActionBarActivity {
         }
 
         return availableFiltersValues;
-    }
-
-    private void updateFilters(String selectedText) {
-        Log.i(TAG, "Selected category: " + selectedText);
-
-        filterAdapter.clear();
-        List<AvailableFilter> availableFilters = productService.getSubcategories(product, selectedText);
-
-        for (AvailableFilter eachAvailableFilter : availableFilters) {
-            filterAdapter.add(eachAvailableFilter);
-        }
     }
 }
