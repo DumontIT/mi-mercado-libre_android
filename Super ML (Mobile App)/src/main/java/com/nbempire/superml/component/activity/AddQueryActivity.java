@@ -10,8 +10,6 @@ import android.widget.Toast;
 import com.nbempire.superml.R;
 import com.nbempire.superml.domain.AvailableFilter;
 import com.nbempire.superml.domain.Product;
-import com.nbempire.superml.service.ProductService;
-import com.nbempire.superml.service.impl.ProductServiceImpl;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -39,8 +37,6 @@ public class AddQueryActivity extends ActionBarActivity {
     public static final String PARAMETER_PRODUCT = "product";
 
     private Product product;
-
-    private ProductService productService = new ProductServiceImpl();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
