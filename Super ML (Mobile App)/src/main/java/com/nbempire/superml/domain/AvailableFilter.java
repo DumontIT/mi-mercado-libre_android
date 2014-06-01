@@ -19,6 +19,8 @@ public class AvailableFilter extends Filter {
 
     private Integer results;
 
+    private boolean checked;
+
     public AvailableFilter(String id, String name, Integer results) {
         super(id, name);
         this.results = results;
@@ -35,5 +37,13 @@ public class AvailableFilter extends Filter {
 
     public Integer getResults() {
         return results;
+    }
+
+    public void setChecked(boolean checked) {
+        this.checked = checked;
+    }
+
+    public boolean isChecked() {
+        return checked;
     }
 }
