@@ -1,6 +1,7 @@
 package com.nbempire.superml.adapter;
 
 import android.content.Context;
+import android.os.Build;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -83,9 +84,13 @@ public class FilterExpandableListAdapter extends BaseExpandableListAdapter {
         View view;
         if (convertView != null) {
             view = convertView;
+        } else if (Build.VERSION.SDK_INT < Build.VERSION_CODES.ICE_CREAM_SANDWICH) {
+            Log.i(TAG, "Using custom layout for groups because Android version code is: " + Build.VERSION.SDK_INT);
+            view = layoutInflater.inflate(R.layout.list_view_group, parent, false);
         } else {
             view = layoutInflater.inflate(android.R.layout.simple_expandable_list_item_1, parent, false);
         }
+
         String filterName = (String) getGroup(groupPosition);
         TextView filterLabel = (TextView) view.findViewById(android.R.id.text1);
         if (filterName != null) {
