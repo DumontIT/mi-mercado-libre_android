@@ -13,7 +13,7 @@
         android:textAppearance="?android:attr/textAppearanceMedium"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:id="@+id/textView" />
+        android:id="@+id/activity_choose_subscription_introduction_text" />
 
     <CheckBox
         android:layout_width="wrap_content"
@@ -21,19 +21,9 @@
         android:text="@string/lowest_price"
         android:id="@+id/lowestPrice"
         android:textAppearance="?android:attr/textAppearanceMedium"
-        android:layout_above="@+id/priceLesserThanAverage"
-        android:layout_alignLeft="@id/priceLesserThanAverage"
-        android:layout_marginBottom="@dimen/separation_between_subscription_types" />
-
-    <CheckBox
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="@string/price_less_than_average"
-        android:id="@+id/priceLesserThanAverage"
-        android:textAppearance="?android:attr/textAppearanceMedium"
-        android:layout_above="@+id/priceHigherThanAverage"
         android:layout_alignParentLeft="true"
-        android:layout_marginBottom="@dimen/separation_between_subscription_types" />
+        android:layout_below="@id/activity_choose_subscription_introduction_text"
+        android:layout_marginTop="@dimen/separation_between_subscription_types" />
 
     <CheckBox
         android:layout_width="wrap_content"
@@ -41,8 +31,19 @@
         android:text="@string/price_higher_than_average"
         android:id="@+id/priceHigherThanAverage"
         android:textAppearance="?android:attr/textAppearanceMedium"
-        android:layout_centerVertical="true"
-        android:layout_alignLeft="@id/priceLesserThanAverage" />
+        android:layout_below="@+id/lowestPrice"
+        android:layout_alignLeft="@id/lowestPrice"
+        android:layout_marginTop="@dimen/separation_between_subscription_types" />
+
+    <CheckBox
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/price_less_than_average"
+        android:id="@+id/priceLesserThanAverage"
+        android:textAppearance="?android:attr/textAppearanceMedium"
+        android:layout_below="@id/priceHigherThanAverage"
+        android:layout_alignLeft="@id/lowestPrice"
+        android:layout_marginTop="@dimen/separation_between_subscription_types" />
 
     <CheckBox
         android:layout_width="wrap_content"
@@ -51,8 +52,8 @@
         android:id="@+id/allNew"
         android:layout_marginTop="@dimen/separation_between_subscription_types"
         android:textAppearance="?android:attr/textAppearanceMedium"
-        android:layout_below="@+id/priceHigherThanAverage"
-        android:layout_alignLeft="@id/priceLesserThanAverage" />
+        android:layout_below="@+id/priceLesserThanAverage"
+        android:layout_alignLeft="@id/lowestPrice" />
 
     <Button
         android:layout_width="fill_parent"
