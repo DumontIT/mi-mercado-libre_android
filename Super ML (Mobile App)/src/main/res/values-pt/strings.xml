@@ -17,9 +17,9 @@
     <string name="error_generic">Ocorreu um erro, por favor, tente novamente mais tarde</string>
     <string name="home_checking_ml_site">Você está em MercadoLivre</string>
     <string name="save">Salvar</string>
-    <string name="add_query_introduction_text">Você receberá notificações de novas publicações:</string>
+    <string name="add_query_introduction_text">Dê mais detalhes para a sua pesquisa para melhores resultados:</string>
     <string name="category">Categoría:</string>
-    <string name="finish">final</string>
+    <string name="next">seguinte</string>
     <string name="choose_subscription_introduction_text">Eu escolher que tipo de postagens para ser notificado:</string>
     <string name="price_less_than_average">Menor preço para o preço médio</string>
     <string name="lowest_price">O mais baixo preço no MercadoLivre</string>
