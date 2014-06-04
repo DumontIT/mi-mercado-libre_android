@@ -3,6 +3,7 @@ package com.nbempire.superml.component.activity;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.widget.Toast;
 import com.nbempire.superml.MainKeys;
 import com.nbempire.superml.R;
 import com.nbempire.superml.domain.Product;
@@ -32,5 +33,6 @@ public class ChooseSubscriptionActivity extends BaseActionBarActivity {
 
     public void saveSubscriptions(View view) {
         Log.i(TAG, "Saving subscriptions for product: " + product.getQuery());
+        Toast.makeText(this, R.string.subscribing, Toast.LENGTH_SHORT).show();
     }
 }

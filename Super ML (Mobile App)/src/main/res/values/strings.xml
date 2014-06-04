@@ -24,5 +24,6 @@
     <string name="lowest_price">Precio más bajo en MercadoLibre</string>
     <string name="price_higher_than_average">Precio mayor al precio promedio</string>
     <string name="all_new">Todas las nuevas</string>
+    <string name="subscribing">Suscribiendo!</string>
 
 </resources>
