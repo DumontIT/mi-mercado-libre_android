@@ -17,7 +17,7 @@ public class MainKeys {
     public static final String DEFAULT_CURRENCY_SYMBOL = "$";
 
     /**
-     * Keys used in local storage.
+     * Keys used in local storage and/or intent's extra parameters.
      */
     public class Keys {
 
@@ -28,5 +28,7 @@ public class MainKeys {
         public static final String CURRENCY_ID_PREFFIX = "currencyId_";
 
         public static final String SITE_ID_PREFFIX = "siteId_";
+
+        public static final String PRODUCT = "product";
     }
 }

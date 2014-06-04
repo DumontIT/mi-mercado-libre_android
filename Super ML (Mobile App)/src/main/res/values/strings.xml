@@ -2,10 +2,10 @@
 <resources>
 
     <string name="app_name">Mi Mercado Libre</string>
-
     <string name="title_section_average_price">Precio Promedio</string>
     <string name="title_section_my_queries">Mis Búsquedas</string>
     <string name="title_activity_add_query">Agregar producto</string>
+    <string name="title_activity_choose_subscription">Elegir suscripción</string>
 
     <string name="action_settings">Configuración</string>
     <string name="query_label">¿Qué estas buscando?</string>
@@ -14,10 +14,15 @@
     <string name="section_my_query_help_text">Elegí una categoría para encontrar las mejores publicaciones</string>
     <string name="average_price_must_enter_query">Debe ingresar un producto</string>
     <string name="error_generic">Ocurrió un error, intente de nuevo más tarde</string>
-    <string name="home_checking_ml_site">Estás en Mercado Libre</string>
+    <string name="home_checking_ml_site">Estás en MercadoLibre</string>
     <string name="save">Guardar</string>
     <string name="add_query_introduction_text">Vas a recibir notificaciones de nuevas publicaciones para:</string>
     <string name="category">Categoria:</string>
     <string name="finish">Terminar</string>
+    <string name="choose_subscription_introduction_text">Elija para qué tipo de publicaciones desea ser notificado:</string>
+    <string name="price_less_than_average">Precio menor al precio promedio</string>
+    <string name="lowest_price">Precio más bajo en MercadoLibre</string>
+    <string name="price_higher_than_average">Precio mayor al precio promedio</string>
+    <string name="all_new">Todas las nuevas</string>
 
 </resources>

@@ -22,11 +22,8 @@ import android.support.v4.content.AsyncTaskLoader;
 import android.support.v4.content.Loader;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.ActionBar;
-import android.support.v7.app.ActionBarActivity;
 import android.util.Log;
 import android.view.LayoutInflater;
-import android.view.Menu;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
@@ -40,6 +37,7 @@ import com.nbempire.superml.R;
 import com.nbempire.superml.domain.Product;
 import com.nbempire.superml.domain.Query;
 import com.nbempire.superml.domain.Site;
+import com.nbempire.superml.exception.UnfixableException;
 import com.nbempire.superml.service.ProductService;
 import com.nbempire.superml.service.SiteService;
 import com.nbempire.superml.service.impl.ProductServiceImpl;
@@ -50,7 +48,7 @@ import java.util.List;
 import java.util.Locale;
 
 
-public class HomeActivity extends ActionBarActivity implements ActionBar.TabListener {
+public class HomeActivity extends BaseActionBarActivity implements ActionBar.TabListener {
 
     /**
      * Tag for class' log.
@@ -176,35 +174,13 @@ public class HomeActivity extends ActionBarActivity implements ActionBar.TabList
 
     private void loadGeneralDataFromServer() {
         //  TODO : We should NOT run this on every app start.
-        ConnectivityManager cm = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
+        ConnectivityManager connectivityManager = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
 
-        NetworkInfo activeNetwork = cm.getActiveNetworkInfo();
+        NetworkInfo activeNetwork = connectivityManager.getActiveNetworkInfo();
         boolean isConnected = activeNetwork != null && activeNetwork.isConnectedOrConnecting();
         if (isConnected) {
             new LoadSitesInfoAsyncTask().execute(sharedPreferences);
         }
-    }
-
-
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.home, menu);
-        return true;
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will automatically handle clicks on the Home/Up button, so long as you specify a parent activity in AndroidManifest.xml.
-        boolean consumed;
-
-        int id = item.getItemId();
-        if (id == R.id.action_settings) {
-            startActivity(new Intent(this, SettingsActivity.class));
-            return true;
-        }
-
-        return super.onOptionsItemSelected(item);
     }
 
     @Override
@@ -247,13 +223,13 @@ public class HomeActivity extends ActionBarActivity implements ActionBar.TabList
         public CharSequence getPageTitle(int position) {
             CharSequence result = null;
 
-            Locale l = Locale.getDefault();
+            Locale locale = Locale.getDefault();
             switch (position) {
                 case 0:
-                    result = getString(R.string.title_section_average_price).toUpperCase(l);
+                    result = getString(R.string.title_section_average_price).toUpperCase(locale);
                     break;
                 case 1:
-                    result = getString(R.string.title_section_my_queries).toUpperCase(l);
+                    result = getString(R.string.title_section_my_queries).toUpperCase(locale);
             }
             return result;
         }
@@ -371,7 +347,7 @@ public class HomeActivity extends ActionBarActivity implements ActionBar.TabList
         if (query.getText().toString().equals("")) {
             Toast.makeText(this, R.string.average_price_must_enter_query, Toast.LENGTH_SHORT).show();
         } else {
-            startActivity(new Intent(this, AddQueryActivity.class).putExtra(AddQueryActivity.PARAMETER_PRODUCT, product));
+            startActivity(new Intent(this, AddQueryActivity.class).putExtra(MainKeys.Keys.PRODUCT, product));
         }
     }
 
@@ -383,7 +359,15 @@ public class HomeActivity extends ActionBarActivity implements ActionBar.TabList
 
         @Override
         protected Product doInBackground(String... params) {
-            return productService.findByQuery(params[0], params[1]);
+            Product result = null;
+
+            try {
+                result = productService.findByQuery(params[0], params[1]);
+            } catch (UnfixableException unfixableException) {
+                Log.e(TAG, "An error occurred while finding a product and the search could not be finished: " + unfixableException.getMessage());
+            }
+
+            return result;
         }
 
         @Override

@@ -2,6 +2,7 @@ package com.nbempire.superml.service;
 
 import com.nbempire.superml.domain.AvailableFilter;
 import com.nbempire.superml.domain.Product;
+import com.nbempire.superml.exception.UnfixableException;
 
 import java.util.List;
 
@@ -25,7 +26,7 @@ public interface ProductService {
      *
      * @return The average price.
      */
-    Product findByQuery(String siteId, String query);
+    Product findByQuery(String siteId, String query) throws UnfixableException;
 
     List<AvailableFilter> getSubcategories(Product product, String category);
 }

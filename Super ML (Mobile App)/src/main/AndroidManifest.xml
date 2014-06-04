@@ -34,6 +34,13 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.nbempire.superml.component.activity.HomeActivity" />
         </activity>
+        <activity
+            android:name="com.nbempire.superml.component.activity.ChooseSubscriptionActivity"
+            android:label="@string/title_activity_choose_subscription">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.nbempire.superml.component.activity.AddQueryActivity" />
+        </activity>
     </application>
 
 </manifest>

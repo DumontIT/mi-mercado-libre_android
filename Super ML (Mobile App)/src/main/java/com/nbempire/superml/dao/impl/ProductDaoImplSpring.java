@@ -9,6 +9,7 @@ import com.nbempire.superml.domain.Category;
 import com.nbempire.superml.domain.Product;
 import com.nbempire.superml.dto.FilterDto;
 import com.nbempire.superml.dto.ProductDto;
+import com.nbempire.superml.exception.UnfixableException;
 import org.springframework.http.converter.json.GsonHttpMessageConverter;
 import org.springframework.web.client.RestClientException;
 import org.springframework.web.client.RestTemplate;
@@ -29,7 +30,7 @@ public class ProductDaoImplSpring implements ProductDao {
     private static final String TAG = "ProductDaoImplSpring";
 
     @Override
-    public Product findByQuery(String siteId, String query) {
+    public Product findByQuery(String siteId, String query) throws UnfixableException {
         String urlString = String.format(MainKeys.API_HOST + "/%1$s/averagePrice/%2$s", siteId, query);
 
         // Create a new RestTemplate instance
@@ -46,6 +47,7 @@ public class ProductDaoImplSpring implements ProductDao {
             Log.i(TAG, "Obtained product: " + dto.getAveragePrice());
         } catch (RestClientException restClientException) {
             Log.e(TAG, "An error occurred while searching for: \"" + query + "\", " + restClientException.getMessage());
+            throw new UnfixableException(restClientException);
         }
 
         return parseProduct(dto);

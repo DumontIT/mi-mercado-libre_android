@@ -1,11 +1,13 @@
 package com.nbempire.superml.component.activity;
 
+import android.content.Intent;
 import android.os.Bundle;
-import android.support.v7.app.ActionBarActivity;
 import android.util.Log;
+import android.view.View;
 import android.widget.ExpandableListView;
 import android.widget.TextView;
 import android.widget.Toast;
+import com.nbempire.superml.MainKeys;
 import com.nbempire.superml.R;
 import com.nbempire.superml.adapter.FilterExpandableListAdapter;
 import com.nbempire.superml.domain.AvailableFilter;
@@ -23,24 +25,21 @@ import java.util.List;
  * @author Nahuel Barrios <barrios.nahuel@gmail.com>.
  * @since 1.
  */
-public class AddQueryActivity extends ActionBarActivity {
+public class AddQueryActivity extends BaseActionBarActivity {
 
     /**
      * Tag for class' log.
      */
     private static final String TAG = "AddQueryActivity";
 
-    /**
-     * Intent parameter.
-     */
-    public static final String PARAMETER_PRODUCT = "product";
+    private Product product;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_query);
 
-        Product product = (Product) getIntent().getSerializableExtra(PARAMETER_PRODUCT);
+        product = (Product) getIntent().getSerializableExtra(MainKeys.Keys.PRODUCT);
         if (product == null) {
             Log.e(TAG, "An error ocurred while parsing the product. Can't load activity!!");
             Toast.makeText(this, R.string.error_generic, Toast.LENGTH_SHORT).show();
@@ -67,5 +66,11 @@ public class AddQueryActivity extends ActionBarActivity {
             FilterExpandableListAdapter adapter = new FilterExpandableListAdapter(this, filterNames, filterValues);
             filtersExpandableListView.setAdapter(adapter);
         }
+    }
+
+    public void saveProduct(View view) {
+        Log.i(TAG, "Preparing product for subscription...");
+
+        startActivity(new Intent(this, ChooseSubscriptionActivity.class).putExtra(MainKeys.Keys.PRODUCT, product));
     }
 }

@@ -4,6 +4,7 @@ import com.nbempire.superml.dao.ProductDao;
 import com.nbempire.superml.dao.impl.ProductDaoImplSpring;
 import com.nbempire.superml.domain.AvailableFilter;
 import com.nbempire.superml.domain.Product;
+import com.nbempire.superml.exception.UnfixableException;
 import com.nbempire.superml.service.ProductService;
 
 import java.util.ArrayList;
@@ -23,7 +24,7 @@ public class ProductServiceImpl implements ProductService {
     private ProductDao productDao = new ProductDaoImplSpring();
 
     @Override
-    public Product findByQuery(String siteId, String query) {
+    public Product findByQuery(String siteId, String query) throws UnfixableException {
         Product product = productDao.findByQuery(siteId, query);
         product.setQuery(query);
         return product;

@@ -1,6 +1,7 @@
 package com.nbempire.superml.dao;
 
 import com.nbempire.superml.domain.Product;
+import com.nbempire.superml.exception.UnfixableException;
 
 /**
  * TODO : Javadoc for
@@ -12,5 +13,5 @@ import com.nbempire.superml.domain.Product;
  */
 public interface ProductDao {
 
-    Product findByQuery(String siteId, String query);
+    Product findByQuery(String siteId, String query) throws UnfixableException;
 }
