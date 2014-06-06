@@ -25,5 +25,7 @@
     <string name="price_higher_than_average">Precio mayor al precio promedio</string>
     <string name="all_new">Todas las nuevas</string>
     <string name="subscribing">Suscribiendo!</string>
+    <string name="subscribed">Te has suscripto correctamente</string>
+    <string name="cant_subscribe">No se pudo realizar la suscripcion</string>
 
 </resources>
