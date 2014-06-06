@@ -378,7 +378,10 @@ public class HomeActivity extends BaseActionBarActivity implements ActionBar.Tab
                 product = result;
                 moneySymbol.setText(
                         sharedPreferences.getString(MainKeys.Keys.CURRENCY_ID_PREFFIX + result.getCurrencyId(), MainKeys.DEFAULT_CURRENCY_SYMBOL));
-                categoryLabel.setText(String.format("%s %s", getText(R.string.category), result.getCategory().getName()));
+
+                if (result.getCategory() != null) {
+                    categoryLabel.setText(String.format("%s %s", getText(R.string.category), result.getCategory().getName()));
+                }
                 averagePrice.setText(String.valueOf(result.getAveragePrice()));
                 minimumPrice.setText(String.valueOf(result.getMinimumPrice()));
                 maximumPrice.setText(String.valueOf(result.getMaximumPrice()));

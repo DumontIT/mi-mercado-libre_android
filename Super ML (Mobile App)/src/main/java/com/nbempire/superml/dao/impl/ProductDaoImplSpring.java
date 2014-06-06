@@ -68,11 +68,12 @@ public class ProductDaoImplSpring implements ProductDao {
         result.setMaximumPrice(dto.getMaximumPrice());
         result.setCurrencyId(dto.getCurrencyId());
 
+        if (dto.getFilters().length > 0) {
+            result.setCategory(parseCategory(dto.getFilters()[0]));
 
-        result.setCategory(parseCategory(dto.getFilters()[0]));
-
-        if (dto.getFilters().length > 1) {
-            result.setAppliedFilters(parseAppliedFilters(dto.getFilters()));
+            if (dto.getFilters().length > 1) {
+                result.setAppliedFilters(parseAppliedFilters(dto.getFilters()));
+            }
         }
 
         result.setAvailableFilters(parseAvailableFilters(dto.getAvailableFilters()));
