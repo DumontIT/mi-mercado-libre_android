@@ -1,5 +1,7 @@
 package com.nbempire.superml.component.activity;
 
+import android.content.Context;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -10,6 +12,7 @@ import com.nbempire.superml.R;
 import com.nbempire.superml.domain.Product;
 import com.nbempire.superml.domain.Subscriptions;
 import com.nbempire.superml.domain.User;
+import com.nbempire.superml.exception.UnfixableException;
 import com.nbempire.superml.service.UserService;
 import com.nbempire.superml.service.impl.UserServiceImpl;
 
@@ -33,6 +36,8 @@ public class ChooseSubscriptionActivity extends BaseActionBarActivity {
 
     private UserService userService;
 
+    private Context context = this;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -49,21 +54,17 @@ public class ChooseSubscriptionActivity extends BaseActionBarActivity {
         Log.d(TAG, "Selected subscriptions: " + subscriptions.size());
 
         Toast.makeText(this, R.string.subscribing, Toast.LENGTH_SHORT).show();
-
-        int resultMessage = R.string.cant_subscribe;
-        if (subscribe(product, subscriptions)) {
-            resultMessage = R.string.subscribed;
-        }
-        Toast.makeText(this, resultMessage, Toast.LENGTH_SHORT).show();
+        subscribe(product, subscriptions);
     }
 
-    private boolean subscribe(Product product, Set<Subscriptions> subscriptions) {
+    private void subscribe(Product product, Set<Subscriptions> subscriptions) {
         product.setSubscriptions(subscriptions);
 
         //  TODO : Functionality : Save user somewhere.
         User anUser = userService.create(this);
         anUser.getProducts().add(product);
-        return userService.updateSubscriptions(anUser);
+
+        new UpdateSubscriptionsAsyncTask().execute(anUser);
     }
 
     private Set<Subscriptions> getSubscriptions(int lowestPrice, int higherThanAverage, int lesserThanAverage, int allNew) {
@@ -83,4 +84,29 @@ public class ChooseSubscriptionActivity extends BaseActionBarActivity {
             subscriptions.add(subscription);
         }
     }
+
+    private class UpdateSubscriptionsAsyncTask extends AsyncTask<User, Boolean, Boolean> {
+
+        @Override
+        protected Boolean doInBackground(User... params) {
+            boolean result = false;
+            try {
+                result = userService.updateSubscriptions(params[0]);
+            } catch (UnfixableException unfixableException) {
+                Log.e(TAG, "An error occurred while trying to subscribe notifications for a product: " + unfixableException.getMessage());
+            }
+
+            return result;
+        }
+
+        @Override
+        protected void onPostExecute(Boolean result) {
+            int resultMessage = R.string.cant_subscribe;
+            if (result != null && result) {
+                resultMessage = R.string.subscribed;
+            }
+            Toast.makeText(context, resultMessage, Toast.LENGTH_SHORT).show();
+        }
+    }
 }
+

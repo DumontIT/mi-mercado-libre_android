@@ -31,4 +31,11 @@ public class MainKeys {
 
         public static final String PRODUCT = "product";
     }
+
+    public class ServerAuthentication {
+
+        public static final String USER = "test";
+
+        public static final String PASSWORD = "test";
+    }
 }

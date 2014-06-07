@@ -29,4 +29,8 @@ public class User {
     public List<Product> getProducts() {
         return products;
     }
+
+    public String getId() {
+        return id;
+    }
 }

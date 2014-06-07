@@ -2,7 +2,9 @@ package com.nbempire.superml.service.impl;
 
 import android.content.Context;
 import android.util.Log;
+import com.nbempire.superml.dao.UserDao;
 import com.nbempire.superml.domain.User;
+import com.nbempire.superml.exception.UnfixableException;
 import com.nbempire.superml.service.UserService;
 
 /**
@@ -20,9 +22,11 @@ public class UserServiceImpl implements UserService {
      */
     private static final String TAG = "UserServiceImpl";
 
+    private UserDao userDao = new UserDaoImplSpring();
+
     @Override
-    public boolean updateSubscriptions(User user) {
-        return false;
+    public boolean updateSubscriptions(User user) throws UnfixableException {
+        return userDao.updateSubscriptions(user);
     }
 
     @Override
