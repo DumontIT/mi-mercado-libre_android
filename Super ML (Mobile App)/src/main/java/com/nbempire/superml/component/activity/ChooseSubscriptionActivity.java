@@ -60,9 +60,9 @@ public class ChooseSubscriptionActivity extends BaseActionBarActivity {
     private void subscribe(Product product, Set<Subscriptions> subscriptions) {
         product.setSubscriptions(subscriptions);
 
-        //  TODO : Functionality : Save user somewhere.
+        //  TODO : Functionality : Save user somewhere???
         User anUser = userService.create(this);
-        anUser.getProducts().add(product);
+        anUser.setProduct(product);
 
         new UpdateSubscriptionsAsyncTask().execute(anUser);
     }

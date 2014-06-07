@@ -1,8 +1,5 @@
 package com.nbempire.superml.domain;
 
-import java.util.ArrayList;
-import java.util.List;
-
 /**
  * Created on 05/06/14, at 23:24.
  *
@@ -13,7 +10,7 @@ public class User {
 
     private final String id;
 
-    private List<Product> products;
+    private Product product;
 
     /**
      * Entity's constructor.
@@ -23,14 +20,17 @@ public class User {
      */
     public User(String id) {
         this.id = id;
-        this.products = new ArrayList<Product>();
-    }
-
-    public List<Product> getProducts() {
-        return products;
     }
 
     public String getId() {
         return id;
+    }
+
+    public Product getProduct() {
+        return product;
+    }
+
+    public void setProduct(Product product) {
+        this.product = product;
     }
 }

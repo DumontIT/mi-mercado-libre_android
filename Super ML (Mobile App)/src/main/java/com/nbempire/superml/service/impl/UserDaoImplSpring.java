@@ -40,9 +40,7 @@ public class UserDaoImplSpring implements UserDao {
         HttpHeaders httpHeaders = new HttpHeaders();
         httpHeaders.setAuthorization(authHeader);
 
-        //  TODO : Unhard-code this...
-        SubscriptionDto dto = new SubscriptionDto("ipod touch");
-        HttpEntity<SubscriptionDto> requestEntity = new HttpEntity<SubscriptionDto>(dto, httpHeaders);
+        HttpEntity<SubscriptionDto> requestEntity = new HttpEntity<SubscriptionDto>(createDto(user), httpHeaders);
 
         RestTemplate restTemplate = new RestTemplate();
         restTemplate.getMessageConverters().add(new GsonHttpMessageConverter());
@@ -64,5 +62,9 @@ public class UserDaoImplSpring implements UserDao {
         }
 
         return result;
+    }
+
+    private SubscriptionDto createDto(User user) {
+        return new SubscriptionDto(user.getProduct().getQuery());
     }
 }
