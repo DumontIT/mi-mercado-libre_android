@@ -1,10 +1,9 @@
 package com.nbempire.superml.service.impl;
 
-import com.nbempire.superml.domain.Subscriptions;
+import android.content.Context;
+import android.util.Log;
 import com.nbempire.superml.domain.User;
 import com.nbempire.superml.service.UserService;
-
-import java.util.Set;
 
 /**
  * TODO : Javadoc for
@@ -16,8 +15,22 @@ import java.util.Set;
  */
 public class UserServiceImpl implements UserService {
 
+    /**
+     * Tag for class' log.
+     */
+    private static final String TAG = "UserServiceImpl";
+
     @Override
-    public boolean subscribe(User user, Set<Subscriptions> subscriptions) {
+    public boolean updateSubscriptions(User user) {
         return false;
+    }
+
+    @Override
+    public User create(Context context) {
+        String userId = android.provider.Settings.Secure.getString(context.getContentResolver(), android.provider.Settings.Secure.ANDROID_ID);
+        User user = new User(userId);
+
+        Log.i(TAG, "Created user with ANDROID_ID: " + userId);
+        return user;
     }
 }

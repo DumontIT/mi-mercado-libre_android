@@ -1,9 +1,7 @@
 package com.nbempire.superml.service;
 
-import com.nbempire.superml.domain.Subscriptions;
+import android.content.Context;
 import com.nbempire.superml.domain.User;
-
-import java.util.Set;
 
 /**
  * TODO : Javadoc for
@@ -15,5 +13,7 @@ import java.util.Set;
  */
 public interface UserService {
 
-    boolean subscribe(User user, Set<Subscriptions> subscriptions);
+    boolean updateSubscriptions(User user);
+
+    User create(Context context);
 }

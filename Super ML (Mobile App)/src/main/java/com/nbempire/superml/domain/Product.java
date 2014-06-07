@@ -1,6 +1,7 @@
 package com.nbempire.superml.domain;
 
 import java.io.Serializable;
+import java.util.Set;
 
 /**
  * TODO : Javadoc for
@@ -32,6 +33,8 @@ public class Product implements Serializable {
     private AppliedFilter[] appliedFilters;
 
     private AvailableFilter[] availableFilters;
+
+    private Set<Subscriptions> subscriptions;
 
     public Product() {
         this.appliedFilters = new AppliedFilter[]{};
@@ -82,10 +85,6 @@ public class Product implements Serializable {
         this.category = category;
     }
 
-    public AppliedFilter[] getAppliedFilters() {
-        return appliedFilters;
-    }
-
     public void setAppliedFilters(AppliedFilter[] appliedFilters) {
         this.appliedFilters = appliedFilters;
     }
@@ -100,5 +99,9 @@ public class Product implements Serializable {
 
     public Category getCategory() {
         return category;
+    }
+
+    public void setSubscriptions(Set<Subscriptions> subscriptions) {
+        this.subscriptions = subscriptions;
     }
 }

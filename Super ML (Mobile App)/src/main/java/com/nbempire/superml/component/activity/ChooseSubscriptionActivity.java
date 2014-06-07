@@ -33,8 +33,6 @@ public class ChooseSubscriptionActivity extends BaseActionBarActivity {
 
     private UserService userService;
 
-    private User user;
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -53,10 +51,19 @@ public class ChooseSubscriptionActivity extends BaseActionBarActivity {
         Toast.makeText(this, R.string.subscribing, Toast.LENGTH_SHORT).show();
 
         int resultMessage = R.string.cant_subscribe;
-        if (userService.subscribe(user, subscriptions)) {
+        if (subscribe(product, subscriptions)) {
             resultMessage = R.string.subscribed;
         }
         Toast.makeText(this, resultMessage, Toast.LENGTH_SHORT).show();
+    }
+
+    private boolean subscribe(Product product, Set<Subscriptions> subscriptions) {
+        product.setSubscriptions(subscriptions);
+
+        //  TODO : Functionality : Save user somewhere.
+        User anUser = userService.create(this);
+        anUser.getProducts().add(product);
+        return userService.updateSubscriptions(anUser);
     }
 
     private Set<Subscriptions> getSubscriptions(int lowestPrice, int higherThanAverage, int lesserThanAverage, int allNew) {
