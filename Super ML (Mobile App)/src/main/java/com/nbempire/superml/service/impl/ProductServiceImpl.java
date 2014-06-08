@@ -1,5 +1,6 @@
 package com.nbempire.superml.service.impl;
 
+import android.util.Log;
 import com.nbempire.superml.dao.ProductDao;
 import com.nbempire.superml.dao.impl.ProductDaoImplSpring;
 import com.nbempire.superml.domain.AvailableFilter;
@@ -21,6 +22,11 @@ import java.util.List;
  */
 public class ProductServiceImpl implements ProductService {
 
+    /**
+     * Tag for class' log.
+     */
+    private static final String TAG = "ProductServiceImpl";
+
     private ProductDao productDao = new ProductDaoImplSpring();
 
     @Override
@@ -41,6 +47,11 @@ public class ProductServiceImpl implements ProductService {
         }
 
         return filters;
+    }
+
+    @Override
+    public void updateAppliedFilters(Product product) {
+        Log.i(TAG, "Update available and applied filters for product: " + product.getQuery());
     }
 
     private AvailableFilter findFilterByName(Product product, String category) {

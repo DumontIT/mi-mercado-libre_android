@@ -12,6 +12,8 @@ import com.nbempire.superml.R;
 import com.nbempire.superml.adapter.FilterExpandableListAdapter;
 import com.nbempire.superml.domain.AvailableFilter;
 import com.nbempire.superml.domain.Product;
+import com.nbempire.superml.service.ProductService;
+import com.nbempire.superml.service.impl.ProductServiceImpl;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -33,6 +35,8 @@ public class AddQueryActivity extends BaseActionBarActivity {
     private static final String TAG = "AddQueryActivity";
 
     private Product product;
+
+    private ProductService productService = new ProductServiceImpl();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -73,6 +77,8 @@ public class AddQueryActivity extends BaseActionBarActivity {
 
     public void saveProduct(View view) {
         Log.i(TAG, "Preparing product for subscription...");
+
+        productService.updateAppliedFilters(product);
 
         startActivity(new Intent(this, ChooseSubscriptionActivity.class).putExtra(MainKeys.Keys.PRODUCT, product));
     }

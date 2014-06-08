@@ -28,5 +28,17 @@ public interface ProductService {
      */
     Product findByQuery(String siteId, String query) throws UnfixableException;
 
+    /**
+     * Get all possible values for the specified {@code category}
+     *
+     * @param product
+     *         The {@link com.nbempire.superml.domain.Product} where the filters are.
+     * @param category
+     *         The name of the filter. It will be used to search in product's filters.
+     *
+     * @return A List of available filters that are the possible values that the specified {@code category} can take.
+     */
     List<AvailableFilter> getSubcategories(Product product, String category);
+
+    void updateAppliedFilters(Product product);
 }
