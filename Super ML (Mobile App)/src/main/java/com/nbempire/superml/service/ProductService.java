@@ -39,6 +39,4 @@ public interface ProductService {
      * @return A List of available filters that are the possible values that the specified {@code category} can take.
      */
     List<AvailableFilter> getSubcategories(Product product, String category);
-
-    void updateAppliedFilters(Product product);
 }

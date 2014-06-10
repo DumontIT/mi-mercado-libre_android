@@ -3,7 +3,10 @@ package com.nbempire.superml.service.impl;
 import android.util.Log;
 import com.nbempire.superml.MainKeys;
 import com.nbempire.superml.dao.UserDao;
+import com.nbempire.superml.domain.AvailableFilter;
 import com.nbempire.superml.domain.User;
+import com.nbempire.superml.dto.SelectedFiltersDto;
+import com.nbempire.superml.dto.SelectedValuesDto;
 import com.nbempire.superml.dto.SubscriptionDto;
 import com.nbempire.superml.exception.UnfixableException;
 import org.springframework.http.HttpAuthentication;
@@ -17,6 +20,9 @@ import org.springframework.http.converter.StringHttpMessageConverter;
 import org.springframework.http.converter.json.GsonHttpMessageConverter;
 import org.springframework.web.client.RestClientException;
 import org.springframework.web.client.RestTemplate;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Created on 06/06/14, at 21:28.
@@ -65,6 +71,31 @@ public class UserDaoImplSpring implements UserDao {
     }
 
     private SubscriptionDto createDto(User user) {
-        return new SubscriptionDto(user.getProduct().getQuery());
+        SubscriptionDto dto = new SubscriptionDto(user.getProduct().getQuery());
+
+        List<SelectedFiltersDto> selectedFilters = parseSelectedFilters(user.getProduct().getAvailableFilters());
+        dto.setSelectedFilters(selectedFilters);
+
+        return dto;
+    }
+
+    private List<SelectedFiltersDto> parseSelectedFilters(AvailableFilter[] availableFilters) {
+
+        List<SelectedFiltersDto> filters = new ArrayList<SelectedFiltersDto>();
+        for (AvailableFilter eachAvailableFilter : availableFilters) {
+
+            List<SelectedValuesDto> values = new ArrayList<SelectedValuesDto>();
+            for (AvailableFilter eachPossibleValue : eachAvailableFilter.getPossibleValues()) {
+                if (eachPossibleValue.isChecked()) {
+                    values.add(new SelectedValuesDto(eachPossibleValue.getId(), eachPossibleValue.getName()));
+                }
+            }
+
+            if (!values.isEmpty()) {
+                filters.add(new SelectedFiltersDto(eachAvailableFilter.getId(), values));
+            }
+        }
+
+        return filters;
     }
 }

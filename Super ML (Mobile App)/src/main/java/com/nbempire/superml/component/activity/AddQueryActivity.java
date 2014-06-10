@@ -78,8 +78,6 @@ public class AddQueryActivity extends BaseActionBarActivity {
     public void saveProduct(View view) {
         Log.i(TAG, "Preparing product for subscription...");
 
-        productService.updateAppliedFilters(product);
-
         startActivity(new Intent(this, ChooseSubscriptionActivity.class).putExtra(MainKeys.Keys.PRODUCT, product));
     }
 }
