@@ -4,6 +4,7 @@ import android.util.Log;
 import com.nbempire.superml.MainKeys;
 import com.nbempire.superml.dao.UserDao;
 import com.nbempire.superml.domain.AvailableFilter;
+import com.nbempire.superml.domain.Subscriptions;
 import com.nbempire.superml.domain.User;
 import com.nbempire.superml.dto.SelectedFiltersDto;
 import com.nbempire.superml.dto.SelectedValuesDto;
@@ -22,7 +23,9 @@ import org.springframework.web.client.RestClientException;
 import org.springframework.web.client.RestTemplate;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 /**
  * Created on 06/06/14, at 21:28.
@@ -71,12 +74,20 @@ public class UserDaoImplSpring implements UserDao {
     }
 
     private SubscriptionDto createDto(User user) {
-        SubscriptionDto dto = new SubscriptionDto(user.getProduct().getQuery());
+        SubscriptionDto subscriptionDto = new SubscriptionDto(user.getProduct().getQuery());
 
         List<SelectedFiltersDto> selectedFilters = parseSelectedFilters(user.getProduct().getAvailableFilters());
-        dto.setSelectedFilters(selectedFilters);
+        Log.d(TAG, "Selected filters: " + selectedFilters.size());
 
-        return dto;
+        subscriptionDto.setSelectedFilters(selectedFilters);
+
+        Set<Integer> selectedSubscriptions = new HashSet<Integer>();
+        for (Subscriptions eachSubscription : user.getSubscriptions()) {
+            selectedSubscriptions.add(eachSubscription.ordinal());
+        }
+        subscriptionDto.setSelectedSubscriptions(selectedSubscriptions);
+
+        return subscriptionDto;
     }
 
     private List<SelectedFiltersDto> parseSelectedFilters(AvailableFilter[] availableFilters) {

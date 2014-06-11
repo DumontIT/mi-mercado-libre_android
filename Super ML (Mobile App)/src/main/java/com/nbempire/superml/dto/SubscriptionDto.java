@@ -1,6 +1,7 @@
 package com.nbempire.superml.dto;
 
 import java.util.List;
+import java.util.Set;
 
 /**
  * TODO : Javadoc for
@@ -16,11 +17,21 @@ public class SubscriptionDto {
 
     private List<SelectedFiltersDto> selectedFilters;
 
+    private Set<Integer> selectedSubscriptions;
+
     public SubscriptionDto(String query) {
         this.query = query;
     }
 
     public void setSelectedFilters(List<SelectedFiltersDto> selectedFilters) {
         this.selectedFilters = selectedFilters;
+    }
+
+    public void setSelectedSubscriptions(Set<Integer> selectedSubscriptions) {
+        this.selectedSubscriptions = selectedSubscriptions;
+    }
+
+    public Set<Integer> getSelectedSubscriptions() {
+        return selectedSubscriptions;
     }
 }

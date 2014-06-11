@@ -1,5 +1,7 @@
 package com.nbempire.superml.domain;
 
+import java.util.Set;
+
 /**
  * Created on 05/06/14, at 23:24.
  *
@@ -11,6 +13,8 @@ public class User {
     private final String id;
 
     private Product product;
+
+    private Set<Subscriptions> subscriptions;
 
     /**
      * Entity's constructor.
@@ -32,5 +36,13 @@ public class User {
 
     public void setProduct(Product product) {
         this.product = product;
+    }
+
+    public void setSubscriptions(Set<Subscriptions> subscriptions) {
+        this.subscriptions = subscriptions;
+    }
+
+    public Set<Subscriptions> getSubscriptions() {
+        return subscriptions;
     }
 }
