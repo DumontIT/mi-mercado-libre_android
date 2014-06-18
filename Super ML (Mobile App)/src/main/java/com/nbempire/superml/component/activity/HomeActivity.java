@@ -32,8 +32,10 @@ import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
+import com.google.android.gms.analytics.GoogleAnalytics;
 import com.nbempire.superml.MainKeys;
 import com.nbempire.superml.R;
+import com.nbempire.superml.component.MiMercadoLibreApplication;
 import com.nbempire.superml.domain.Product;
 import com.nbempire.superml.domain.Query;
 import com.nbempire.superml.domain.Site;
@@ -105,6 +107,9 @@ public class HomeActivity extends BaseActionBarActivity implements ActionBar.Tab
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home);
 
+        //  Get a Tracker (should auto-report)
+        ((MiMercadoLibreApplication) getApplication()).getTracker(MiMercadoLibreApplication.TrackerName.APP_TRACKER);
+
         sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
         sharedPreferences.registerOnSharedPreferenceChangeListener(onSharedPreferenceChangeListener);
         loadGeneralDataFromServer();
@@ -134,6 +139,20 @@ public class HomeActivity extends BaseActionBarActivity implements ActionBar.Tab
             // TabListener interface, as the callback (listener) for when this tab is selected.
             actionBar.addTab(actionBar.newTab().setText(sectionsPagerAdapter.getPageTitle(i)).setTabListener(this));
         }
+    }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+        //Get an Analytics tracker to report app starts & uncaught exceptions etc.
+        GoogleAnalytics.getInstance(this).reportActivityStart(this);
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+        //Stop the analytics tracking
+        GoogleAnalytics.getInstance(this).reportActivityStop(this);
     }
 
     private static String generateCurrentCountryLabel(Context context) {
