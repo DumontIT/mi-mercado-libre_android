@@ -14,9 +14,9 @@ public class SelectedFiltersDto {
 
     private String id;
 
-    private List<SelectedValuesDto> values;
+    private List<String> values;
 
-    public SelectedFiltersDto(String id, List<SelectedValuesDto> values) {
+    public SelectedFiltersDto(String id, List<String> values) {
         this.id = id;
         this.values = values;
     }

@@ -7,7 +7,6 @@ import com.nbempire.superml.domain.AvailableFilter;
 import com.nbempire.superml.domain.Subscriptions;
 import com.nbempire.superml.domain.User;
 import com.nbempire.superml.dto.SelectedFiltersDto;
-import com.nbempire.superml.dto.SelectedValuesDto;
 import com.nbempire.superml.dto.SubscriptionDto;
 import com.nbempire.superml.exception.UnfixableException;
 import org.springframework.http.HttpAuthentication;
@@ -95,10 +94,10 @@ public class UserDaoImplSpring implements UserDao {
         List<SelectedFiltersDto> filters = new ArrayList<SelectedFiltersDto>();
         for (AvailableFilter eachAvailableFilter : availableFilters) {
 
-            List<SelectedValuesDto> values = new ArrayList<SelectedValuesDto>();
+            List<String> values = new ArrayList<String>();
             for (AvailableFilter eachPossibleValue : eachAvailableFilter.getPossibleValues()) {
                 if (eachPossibleValue.isChecked()) {
-                    values.add(new SelectedValuesDto(eachPossibleValue.getId(), eachPossibleValue.getName()));
+                    values.add(eachPossibleValue.getId());
                 }
             }
 
