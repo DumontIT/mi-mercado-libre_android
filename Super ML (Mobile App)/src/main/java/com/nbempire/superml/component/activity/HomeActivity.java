@@ -33,6 +33,8 @@ import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 import com.google.android.gms.analytics.GoogleAnalytics;
+import com.google.android.gms.analytics.HitBuilders;
+import com.google.android.gms.analytics.Tracker;
 import com.nbempire.superml.MainKeys;
 import com.nbempire.superml.R;
 import com.nbempire.superml.component.MiMercadoLibreApplication;
@@ -64,6 +66,8 @@ public class HomeActivity extends BaseActionBarActivity implements ActionBar.Tab
     private static SharedPreferences sharedPreferences;
 
     private Product product;
+
+    private Tracker tracker;
 
     /**
      * The {@link android.support.v4.view.PagerAdapter} that will provide fragments for each of the sections. We use a {@link FragmentPagerAdapter}
@@ -108,7 +112,7 @@ public class HomeActivity extends BaseActionBarActivity implements ActionBar.Tab
         setContentView(R.layout.activity_home);
 
         //  Get a Tracker (should auto-report)
-        ((MiMercadoLibreApplication) getApplication()).getTracker(MiMercadoLibreApplication.TrackerName.APP_TRACKER);
+        tracker = ((MiMercadoLibreApplication) getApplication()).getTracker(MiMercadoLibreApplication.TrackerName.APP_TRACKER);
 
         sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
         sharedPreferences.registerOnSharedPreferenceChangeListener(onSharedPreferenceChangeListener);
@@ -349,6 +353,12 @@ public class HomeActivity extends BaseActionBarActivity implements ActionBar.Tab
     public void searchAveragePrice(View view) {
         Log.d(TAG, "View average price button pressed");
         Log.i(TAG, "Searching product: " + query.getText());
+
+        tracker.send(new HitBuilders.EventBuilder()
+                             .setCategory("search")
+                             .setAction("viewAveragePrice")
+                             .setLabel(query.getText().toString())
+                             .build());
 
         if (query.getText().toString().equals("")) {
             Toast.makeText(this, R.string.average_price_must_enter_query, Toast.LENGTH_SHORT).show();
