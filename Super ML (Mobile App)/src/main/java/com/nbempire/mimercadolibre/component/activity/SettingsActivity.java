@@ -161,8 +161,8 @@ public class SettingsActivity extends PreferenceActivity {
      */
     private static Preference.OnPreferenceChangeListener sBindPreferenceSummaryToValueListener = new Preference.OnPreferenceChangeListener() {
         @Override
-        public boolean onPreferenceChange(Preference preference, Object value) {
-            String stringValue = value.toString();
+        public boolean onPreferenceChange(Preference preference, Object newValue) {
+            String stringValue = newValue.toString();
 
             if (preference instanceof ListPreference) {
                 // For list preferences, look up the correct display value in the preference's 'entries' list.
@@ -171,16 +171,16 @@ public class SettingsActivity extends PreferenceActivity {
 
                 //  First time display the default language.
                 index = index >= 0 ? index : 0;
-                CharSequence newValue = listPreference.getEntries()[index];
+                CharSequence newLabel = listPreference.getEntries()[index];
 
                 tracker.send(new HitBuilders.EventBuilder()
                                      .setCategory("settings")
                                      .setAction("update")
-                                     .setLabel(newValue.toString())
+                                     .setLabel(newLabel.toString())
                                      .build());
 
                 // Set the summary to reflect the new value.
-                preference.setSummary(newValue);
+                preference.setSummary(newLabel);
             } else {
                 // For all other preferences, set the summary to the value's simple string representation.
                 preference.setSummary(stringValue);
