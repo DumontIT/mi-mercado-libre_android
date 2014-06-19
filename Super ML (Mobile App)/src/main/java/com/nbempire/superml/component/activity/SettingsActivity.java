@@ -12,7 +12,11 @@ import android.preference.PreferenceFragment;
 import android.preference.PreferenceManager;
 import android.support.v4.app.NavUtils;
 import android.view.MenuItem;
+import com.google.android.gms.analytics.GoogleAnalytics;
+import com.google.android.gms.analytics.HitBuilders;
+import com.google.android.gms.analytics.Tracker;
 import com.nbempire.superml.R;
+import com.nbempire.superml.component.MiMercadoLibreApplication;
 
 import java.util.List;
 
@@ -33,10 +37,33 @@ public class SettingsActivity extends PreferenceActivity {
 
     private static final String COUNTRY_KEY = "country";
 
+    /**
+     * It's the Google Analytics tracker. Use it to track events and so on.
+     */
+    protected static Tracker tracker;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        //  Get a Tracker (should auto-report)
+        tracker = ((MiMercadoLibreApplication) getApplication()).getTracker(MiMercadoLibreApplication.TrackerName.APP_TRACKER);
+
         setupActionBar();
+    }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+        //  Get an Analytics tracker to report app starts & uncaught exceptions etc.
+        GoogleAnalytics.getInstance(this).reportActivityStart(this);
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+        //  Stop the analytics tracking
+        GoogleAnalytics.getInstance(this).reportActivityStop(this);
     }
 
     /**
@@ -142,11 +169,20 @@ public class SettingsActivity extends PreferenceActivity {
                 ListPreference listPreference = (ListPreference) preference;
                 int index = listPreference.findIndexOfValue(stringValue);
 
+                //  First time display the default language.
+                index = index >= 0 ? index : 0;
+                CharSequence newValue = listPreference.getEntries()[index];
+
+                tracker.send(new HitBuilders.EventBuilder()
+                                     .setCategory("settings")
+                                     .setAction("update")
+                                     .setLabel(newValue.toString())
+                                     .build());
+
                 // Set the summary to reflect the new value.
-                preference.setSummary(index >= 0 ? listPreference.getEntries()[index] : null);
+                preference.setSummary(newValue);
             } else {
-                // For all other preferences, set the summary to the value's
-                // simple string representation.
+                // For all other preferences, set the summary to the value's simple string representation.
                 preference.setSummary(stringValue);
             }
             return true;

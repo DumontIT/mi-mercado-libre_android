@@ -32,12 +32,11 @@ import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
-import com.google.android.gms.analytics.GoogleAnalytics;
 import com.google.android.gms.analytics.HitBuilders;
-import com.google.android.gms.analytics.Tracker;
+import com.google.android.gms.common.ConnectionResult;
+import com.google.android.gms.common.GooglePlayServicesUtil;
 import com.nbempire.superml.MainKeys;
 import com.nbempire.superml.R;
-import com.nbempire.superml.component.MiMercadoLibreApplication;
 import com.nbempire.superml.domain.Product;
 import com.nbempire.superml.domain.Query;
 import com.nbempire.superml.domain.Site;
@@ -66,8 +65,6 @@ public class HomeActivity extends BaseActionBarActivity implements ActionBar.Tab
     private static SharedPreferences sharedPreferences;
 
     private Product product;
-
-    private Tracker tracker;
 
     /**
      * The {@link android.support.v4.view.PagerAdapter} that will provide fragments for each of the sections. We use a {@link FragmentPagerAdapter}
@@ -111,8 +108,10 @@ public class HomeActivity extends BaseActionBarActivity implements ActionBar.Tab
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home);
 
-        //  Get a Tracker (should auto-report)
-        tracker = ((MiMercadoLibreApplication) getApplication()).getTracker(MiMercadoLibreApplication.TrackerName.APP_TRACKER);
+        int playServicesAvailable = GooglePlayServicesUtil.isGooglePlayServicesAvailable(this);
+        if (playServicesAvailable != ConnectionResult.SUCCESS) {
+            GooglePlayServicesUtil.getErrorDialog(playServicesAvailable, this, 0);
+        }
 
         sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
         sharedPreferences.registerOnSharedPreferenceChangeListener(onSharedPreferenceChangeListener);
@@ -143,20 +142,6 @@ public class HomeActivity extends BaseActionBarActivity implements ActionBar.Tab
             // TabListener interface, as the callback (listener) for when this tab is selected.
             actionBar.addTab(actionBar.newTab().setText(sectionsPagerAdapter.getPageTitle(i)).setTabListener(this));
         }
-    }
-
-    @Override
-    protected void onStart() {
-        super.onStart();
-        //Get an Analytics tracker to report app starts & uncaught exceptions etc.
-        GoogleAnalytics.getInstance(this).reportActivityStart(this);
-    }
-
-    @Override
-    protected void onStop() {
-        super.onStop();
-        //Stop the analytics tracking
-        GoogleAnalytics.getInstance(this).reportActivityStop(this);
     }
 
     private static String generateCurrentCountryLabel(Context context) {
@@ -356,7 +341,7 @@ public class HomeActivity extends BaseActionBarActivity implements ActionBar.Tab
 
         tracker.send(new HitBuilders.EventBuilder()
                              .setCategory("search")
-                             .setAction("viewAveragePrice")
+                             .setAction("averagePrice")
                              .setLabel(query.getText().toString())
                              .build());
 
