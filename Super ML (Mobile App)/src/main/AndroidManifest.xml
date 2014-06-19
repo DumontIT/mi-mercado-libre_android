@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-          package="com.nbempire.superml">
+          package="com.nbempire.mimercadolibre">
 
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <uses-permission android:name="android.permission.INTERNET" />
@@ -10,14 +10,14 @@
         android:icon="@drawable/ic_launcher"
         android:label="@string/app_name"
         android:theme="@style/AppTheme"
-        android:name=".component.MiMercadoLibreApplication">
+        android:name="com.nbempire.mimercadolibre.component.MiMercadoLibreApplication">
 
         <meta-data
             android:name="com.google.android.gms.version"
             android:value="@integer/google_play_services_version" />
 
         <activity
-            android:name="com.nbempire.superml.component.activity.HomeActivity"
+            android:name="com.nbempire.mimercadolibre.component.activity.HomeActivity"
             android:label="@string/app_name"
             android:windowSoftInputMode="adjustResize">
             <intent-filter>
@@ -27,25 +27,25 @@
             </intent-filter>
         </activity>
         <activity
-            android:name="com.nbempire.superml.component.activity.SettingsActivity"
+            android:name="com.nbempire.mimercadolibre.component.activity.SettingsActivity"
             android:label="@string/title_activity_settings">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value="com.nbempire.superml.component.activity.HomeActivity" />
+                android:value="com.nbempire.mimercadolibre.component.activity.HomeActivity" />
         </activity>
         <activity
-            android:name="com.nbempire.superml.component.activity.AddQueryActivity"
+            android:name="com.nbempire.mimercadolibre.component.activity.AddQueryActivity"
             android:label="@string/title_activity_add_query">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value="com.nbempire.superml.component.activity.HomeActivity" />
+                android:value="com.nbempire.mimercadolibre.component.activity.HomeActivity" />
         </activity>
         <activity
-            android:name="com.nbempire.superml.component.activity.ChooseSubscriptionActivity"
+            android:name="com.nbempire.mimercadolibre.component.activity.ChooseSubscriptionActivity"
             android:label="@string/title_activity_choose_subscription">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value="com.nbempire.superml.component.activity.AddQueryActivity" />
+                android:value="com.nbempire.mimercadolibre.component.activity.AddQueryActivity" />
         </activity>
     </application>
 

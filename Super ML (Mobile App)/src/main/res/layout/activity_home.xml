@@ -3,4 +3,4 @@
                                    android:id="@+id/pager"
                                    android:layout_width="match_parent"
                                    android:layout_height="match_parent"
-                                   tools:context="com.nbempire.superml.component.activity.HomeActivity" />
+                                   tools:context="com.nbempire.mimercadolibre.component.activity.HomeActivity" />

@@ -20,9 +20,9 @@
     <!-- If ga_autoActivityTracking is enabled, an alternate screen name can be specified to substitute for the full length canonical Activity name
     in screen view hit. In order to specify an alternate screen name use an <screenName> element, with the name attribute specifying the canonical
     name, and the value the alias to use instead. -->
-    <screenName name="com.nbempire.superml.component.activity.HomeActivity">Home</screenName>
-    <screenName name="com.nbempire.superml.component.activity.AddQueryActivity">ChooseQueryFilters</screenName>
-    <screenName name="com.nbempire.superml.component.activity.ChooseSubscriptionActivity">ChooseSubscriptions</screenName>
-    <screenName name="com.nbempire.superml.component.activity.SettingsActivity">Settings</screenName>
+    <screenName name="com.nbempire.mimercadolibre.component.activity.HomeActivity">Home</screenName>
+    <screenName name="com.nbempire.mimercadolibre.component.activity.AddQueryActivity">ChooseQueryFilters</screenName>
+    <screenName name="com.nbempire.mimercadolibre.component.activity.ChooseSubscriptionActivity">ChooseSubscriptions</screenName>
+    <screenName name="com.nbempire.mimercadolibre.component.activity.SettingsActivity">Settings</screenName>
 
 </resources>
