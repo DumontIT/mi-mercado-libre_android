@@ -436,7 +436,8 @@ public class HomeActivity extends BaseActionBarActivity implements ActionBar.Tab
             query.setText(product.getQuery());
             viewsToHide.add(saveQueryButton);
         } else {
-            viewsToShow.add(saveQueryButton);
+            //  TODO : Unhard-code saveQueryButton to enable subscriptions.
+//            viewsToShow.add(saveQueryButton);
         }
 
         updateViewsVisibility(View.VISIBLE, viewsToShow.toArray(new View[viewsToShow.size()]));
