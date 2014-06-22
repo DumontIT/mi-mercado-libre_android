@@ -392,14 +392,14 @@ public class HomeActivity extends BaseActionBarActivity implements ActionBar.Tab
             } else {
                 product = result;
                 moneySymbol.setText(
-                        sharedPreferences.getString(MainKeys.Keys.CURRENCY_ID_PREFFIX + result.getCurrencyId(), MainKeys.DEFAULT_CURRENCY_SYMBOL));
+                        sharedPreferences.getString(MainKeys.Keys.CURRENCY_ID_PREFFIX + product.getCurrencyId(), MainKeys.DEFAULT_CURRENCY_SYMBOL));
 
-                if (result.getCategory() != null) {
-                    categoryLabel.setText(String.format("%s %s", getText(R.string.category), result.getCategory().getName()));
+                if (product.getCategory() != null) {
+                    categoryLabel.setText(String.format("%s %s", getText(R.string.category), product.getCategory().getName()));
                 }
-                averagePrice.setText(String.valueOf(result.getAveragePrice()));
-                minimumPrice.setText(String.valueOf(result.getMinimumPrice()));
-                maximumPrice.setText(String.valueOf(result.getMaximumPrice()));
+                averagePrice.setText(String.valueOf(product.getAveragePrice()));
+                minimumPrice.setText(String.valueOf(product.getMinimumPrice()));
+                maximumPrice.setText(String.valueOf(product.getMaximumPrice()));
 
                 updateViewsVisibility(View.VISIBLE,
                                       new View[]{averagePrice, minimumPrice, maximumPrice, moneySymbol, saveQueryButton, categoryLabel});
@@ -450,8 +450,15 @@ public class HomeActivity extends BaseActionBarActivity implements ActionBar.Tab
                 view = convertView;
             }
 
-            Query query = getItem(position);
-            ((TextView) view.findViewById(android.R.id.text1)).setText(query.getText());
+            final Query query = getItem(position);
+            TextView textView = (TextView) view.findViewById(android.R.id.text1);
+            textView.setText(query.getText());
+            textView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Log.d(TAG, "Selected saved query: " + query.getText());
+                }
+            });
 
             return view;
         }
