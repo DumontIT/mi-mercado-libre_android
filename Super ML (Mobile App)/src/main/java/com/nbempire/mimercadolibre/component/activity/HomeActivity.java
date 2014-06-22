@@ -44,6 +44,7 @@ import com.nbempire.mimercadolibre.service.impl.ProductServiceImpl;
 import com.nbempire.mimercadolibre.service.impl.SiteServiceImpl;
 
 import java.util.ArrayList;
+import java.util.Formatter;
 import java.util.List;
 import java.util.Locale;
 
@@ -473,7 +474,12 @@ public class HomeActivity extends BaseActionBarActivity implements ActionBar.Tab
 
             final Product product = getItem(position);
             TextView textView = (TextView) view.findViewById(android.R.id.text1);
-            textView.setText(product.getQuery());
+
+            String currencySymbol =
+                    sharedPreferences.getString(MainKeys.Keys.CURRENCY_ID_PREFFIX + product.getCurrencyId(), MainKeys.DEFAULT_CURRENCY_SYMBOL);
+            String label = new Formatter().format("%s (%s%d)", product.getQuery(), currencySymbol, product.getAveragePrice()).toString();
+
+            textView.setText(label);
             textView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
