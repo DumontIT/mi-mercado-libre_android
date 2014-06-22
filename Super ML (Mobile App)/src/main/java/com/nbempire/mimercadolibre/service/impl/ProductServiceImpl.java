@@ -1,5 +1,6 @@
 package com.nbempire.mimercadolibre.service.impl;
 
+import android.content.SharedPreferences;
 import com.nbempire.mimercadolibre.dao.ProductDao;
 import com.nbempire.mimercadolibre.dao.impl.ProductDaoImplSpring;
 import com.nbempire.mimercadolibre.domain.AvailableFilter;
@@ -46,6 +47,18 @@ public class ProductServiceImpl implements ProductService {
         }
 
         return filters;
+    }
+
+    @Override
+    public void add(SharedPreferences sharedPreferences, Product product) {
+        //  TODO : Functionality : Check whether it already exists or not
+
+        productDao.add(sharedPreferences, product);
+    }
+
+    @Override
+    public List<Product> findAll(SharedPreferences sharedPreferences) {
+        return productDao.findAll(sharedPreferences);
     }
 
     private AvailableFilter findFilterByName(Product product, String category) {

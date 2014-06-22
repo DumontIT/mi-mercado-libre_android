@@ -36,14 +36,11 @@ import com.google.android.gms.common.GooglePlayServicesUtil;
 import com.nbempire.mimercadolibre.MainKeys;
 import com.nbempire.mimercadolibre.R;
 import com.nbempire.mimercadolibre.domain.Product;
-import com.nbempire.mimercadolibre.domain.Query;
 import com.nbempire.mimercadolibre.domain.Site;
 import com.nbempire.mimercadolibre.exception.UnfixableException;
 import com.nbempire.mimercadolibre.service.ProductService;
-import com.nbempire.mimercadolibre.service.QueryService;
 import com.nbempire.mimercadolibre.service.SiteService;
 import com.nbempire.mimercadolibre.service.impl.ProductServiceImpl;
-import com.nbempire.mimercadolibre.service.impl.QueryServiceImpl;
 import com.nbempire.mimercadolibre.service.impl.SiteServiceImpl;
 
 import java.util.List;
@@ -60,8 +57,6 @@ public class HomeActivity extends BaseActionBarActivity implements ActionBar.Tab
     private static ProductService productService = new ProductServiceImpl();
 
     private SiteService siteService = new SiteServiceImpl();
-
-    private static QueryService queryService = new QueryServiceImpl();
 
     private static SharedPreferences sharedPreferences;
 
@@ -309,20 +304,20 @@ public class HomeActivity extends BaseActionBarActivity implements ActionBar.Tab
             myQueries.setAdapter(myQueriesAdapter);
 
             // Prepare the loader.  Either re-connect with an existing one, or start a new one.
-            getLoaderManager().initLoader(0, null, new LoaderManager.LoaderCallbacks<List<Query>>() {
+            getLoaderManager().initLoader(0, null, new LoaderManager.LoaderCallbacks<List<Product>>() {
                 @Override
-                public Loader<List<Query>> onCreateLoader(int id, Bundle args) {
+                public Loader<List<Product>> onCreateLoader(int id, Bundle args) {
                     return new MyQueriesListLoader(container.getContext());
                 }
 
                 @Override
-                public void onLoadFinished(Loader<List<Query>> loader, List<Query> data) {
+                public void onLoadFinished(Loader<List<Product>> loader, List<Product> data) {
                     // Set the new data in the adapter.
                     myQueriesAdapter.setData(data);
                 }
 
                 @Override
-                public void onLoaderReset(Loader<List<Query>> loader) {
+                public void onLoaderReset(Loader<List<Product>> loader) {
                     // Clear the data in the adapter.
                     myQueriesAdapter.setData(null);
                 }
@@ -404,7 +399,7 @@ public class HomeActivity extends BaseActionBarActivity implements ActionBar.Tab
                 updateViewsVisibility(View.VISIBLE,
                                       new View[]{averagePrice, minimumPrice, maximumPrice, moneySymbol, saveQueryButton, categoryLabel});
 
-                queryService.add(sharedPreferences, queryService.createFromProduct(product));
+                productService.add(sharedPreferences, product);
             }
         }
     }
@@ -418,7 +413,7 @@ public class HomeActivity extends BaseActionBarActivity implements ActionBar.Tab
         }
     }
 
-    public static class MyQueriesAdapter extends ArrayAdapter<Query> {
+    public static class MyQueriesAdapter extends ArrayAdapter<Product> {
 
         //  Change this to a list of my queries (the ones that I'm subscribed).
         private final LayoutInflater layoutInflater;
@@ -428,11 +423,11 @@ public class HomeActivity extends BaseActionBarActivity implements ActionBar.Tab
             layoutInflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         }
 
-        public void setData(List<Query> data) {
+        public void setData(List<Product> data) {
             clear();
             if (data != null) {
-                for (Query eachQuery : data) {
-                    add(eachQuery);
+                for (Product eachProduct : data) {
+                    add(eachProduct);
                 }
             }
         }
@@ -450,13 +445,13 @@ public class HomeActivity extends BaseActionBarActivity implements ActionBar.Tab
                 view = convertView;
             }
 
-            final Query query = getItem(position);
+            final Product product = getItem(position);
             TextView textView = (TextView) view.findViewById(android.R.id.text1);
-            textView.setText(query.getText());
+            textView.setText(product.getQuery());
             textView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    Log.d(TAG, "Selected saved query: " + query.getText());
+                    Log.d(TAG, "Selected saved product: " + product.getQuery());
                 }
             });
 
@@ -493,11 +488,11 @@ public class HomeActivity extends BaseActionBarActivity implements ActionBar.Tab
     }
 
     /**
-     * A custom Loader that loads all of the installed applications.
+     * A custom Loader that loads all stored products.
      */
-    public static class MyQueriesListLoader extends AsyncTaskLoader<List<Query>> {
+    public static class MyQueriesListLoader extends AsyncTaskLoader<List<Product>> {
 
-        private List<Query> userQueries;
+        private List<Product> userQueries;
 
         private PackageIntentReceiver packageIntentReceiver;
 
@@ -510,8 +505,8 @@ public class HomeActivity extends BaseActionBarActivity implements ActionBar.Tab
          * published by the loader.
          */
         @Override
-        public List<Query> loadInBackground() {
-            return queryService.findAll(sharedPreferences);
+        public List<Product> loadInBackground() {
+            return productService.findAll(sharedPreferences);
         }
 
         /**
@@ -519,7 +514,7 @@ public class HomeActivity extends BaseActionBarActivity implements ActionBar.Tab
          * a little more logic.
          */
         @Override
-        public void deliverResult(List<Query> data) {
+        public void deliverResult(List<Product> data) {
             if (isReset()) {
                 // An async query came in while the loader is stopped.  We don't need the result.
                 if (data != null) {
@@ -527,7 +522,7 @@ public class HomeActivity extends BaseActionBarActivity implements ActionBar.Tab
                 }
             }
 
-            List<Query> oldApps = data;
+            List<Product> oldApps = data;
             userQueries = data;
 
             if (isStarted()) {
@@ -575,7 +570,7 @@ public class HomeActivity extends BaseActionBarActivity implements ActionBar.Tab
          * Handles a request to cancel a load.
          */
         @Override
-        public void onCanceled(List<Query> data) {
+        public void onCanceled(List<Product> data) {
             super.onCanceled(data);
 
             // At this point we can release the resources associated with 'data' if needed.
@@ -602,7 +597,7 @@ public class HomeActivity extends BaseActionBarActivity implements ActionBar.Tab
         /**
          * Helper function to take care of releasing resources associated with an actively loaded data set.
          */
-        protected void onReleaseResources(List<Query> apps) {
+        protected void onReleaseResources(List<Product> products) {
             // For a simple List<> there is nothing to do.  For something like a Cursor, we would close it here.
         }
     }

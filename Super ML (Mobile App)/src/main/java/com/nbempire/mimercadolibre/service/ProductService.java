@@ -1,5 +1,6 @@
 package com.nbempire.mimercadolibre.service;
 
+import android.content.SharedPreferences;
 import com.nbempire.mimercadolibre.domain.AvailableFilter;
 import com.nbempire.mimercadolibre.domain.Product;
 import com.nbempire.mimercadolibre.exception.UnfixableException;
@@ -39,4 +40,11 @@ public interface ProductService {
      * @return A List of available filters that are the possible values that the specified {@code category} can take.
      */
     List<AvailableFilter> getSubcategories(Product product, String category);
+
+    /**
+     * Same as {@link com.nbempire.mimercadolibre.dao.ProductDao#add(android.content.SharedPreferences, com.nbempire.mimercadolibre.domain.Product)}
+     */
+    void add(SharedPreferences sharedPreferences, Product product);
+
+    List<Product> findAll(SharedPreferences sharedPreferences);
 }
