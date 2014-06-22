@@ -8,5 +8,6 @@ Native Android app for those Mercado Libre's buyers/sellers that want to have an
 Before generating a new release
 --
 
-* Update `ga_trackingId` property in app_tracker.xml.
-* Update `android.signingConfigs.release` properties.
+* Update `MainKeys.API_HOST` constant field.
+* Update `ga_trackingId` property in `app_tracker.xml`.
+* Update `android.signingConfigs.release` properties in `build.gradle`.
