@@ -1,4 +1,4 @@
-package com.nbempire.mimercadolibre.service.impl;
+package com.nbempire.mimercadolibre.dao.impl;
 
 import android.util.Log;
 import com.nbempire.mimercadolibre.MainKeys;
