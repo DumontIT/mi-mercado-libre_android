@@ -73,7 +73,7 @@ public class HomeActivity extends BaseActionBarActivity implements ActionBar.Tab
     /**
      * The {@link ViewPager} that will host the section contents.
      */
-    private ViewPager viewPager;
+    private static ViewPager viewPager;
 
     private static EditText query;
 
@@ -479,6 +479,7 @@ public class HomeActivity extends BaseActionBarActivity implements ActionBar.Tab
                 public void onClick(View v) {
                     Log.d(TAG, "Selected saved product: " + product.getQuery());
                     updateAveragePriceFragment(v.getContext(), product, true);
+                    viewPager.setCurrentItem(0, true);
                 }
             });
 
