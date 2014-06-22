@@ -1,9 +1,7 @@
 package com.nbempire.mimercadolibre.domain;
 
-import java.util.Date;
-
 /**
- * TODO : Javadoc for
+ * Represents a query made by the user. It has got the information that was shown to the user.
  * <p/>
  * Created on 26/05/14, at 19:44.
  *
@@ -20,10 +18,11 @@ public class Query {
 
     private int maximumPrice;
 
-    private Date lastSearch;
-
-    public Query(String text) {
+    public Query(String text, int averagePrice, int minimumPrice, int maximumPrice) {
         this.text = text;
+        this.averagePrice = averagePrice;
+        this.minimumPrice = minimumPrice;
+        this.maximumPrice = maximumPrice;
     }
 
     public String getText() {
