@@ -224,7 +224,7 @@ public class HomeActivity extends BaseActionBarActivity implements ActionBar.Tab
         @Override
         public int getCount() {
             // Show 2 total pages.
-            return 1;
+            return 2;
         }
 
         @Override
@@ -401,7 +401,7 @@ public class HomeActivity extends BaseActionBarActivity implements ActionBar.Tab
                 maximumPrice.setText(String.valueOf(result.getMaximumPrice()));
 
                 updateViewsVisibility(View.VISIBLE,
-                                      new View[]{averagePrice, minimumPrice, maximumPrice, moneySymbol, /*saveQueryButton,*/ categoryLabel});
+                                      new View[]{averagePrice, minimumPrice, maximumPrice, moneySymbol, saveQueryButton, categoryLabel});
             }
         }
     }

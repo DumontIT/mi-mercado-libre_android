@@ -10,7 +10,7 @@ package com.nbempire.mimercadolibre;
  */
 public class MainKeys {
 
-    public static final String API_HOST = "http://super-ml.herokuapp.com";
+    public static final String API_HOST = "http://desa-mi-mercado-libre.herokuapp.com";
 
     public static final String DEFAULT_COUNTRY_ID = "MLA";
 
