@@ -30,6 +30,8 @@ public class MainKeys {
         public static final String SITE_ID_PREFFIX = "siteId_";
 
         public static final String PRODUCT = "product";
+
+        public static final String SAVED_QUERIES = "savedQueries";
     }
 
     public class ServerAuthentication {

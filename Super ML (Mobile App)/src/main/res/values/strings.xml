@@ -11,7 +11,6 @@
     <string name="query_label">¿Qué estas buscando?</string>
     <string name="search_button_label">Ver Precio Promedio</string>
     <string name="moneySymbol">$</string>
-    <string name="section_my_query_help_text">Elegí una categoría para encontrar las mejores publicaciones</string>
     <string name="average_price_must_enter_query">Debe ingresar un producto</string>
     <string name="error_generic">Ocurrió un error, intente de nuevo más tarde</string>
     <string name="home_checking_ml_site">Estás en MercadoLibre</string>

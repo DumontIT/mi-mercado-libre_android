@@ -3,6 +3,7 @@ package com.nbempire.mimercadolibre.service.impl;
 import android.content.Context;
 import android.util.Log;
 import com.nbempire.mimercadolibre.dao.UserDao;
+import com.nbempire.mimercadolibre.dao.impl.UserDaoImplSpring;
 import com.nbempire.mimercadolibre.domain.User;
 import com.nbempire.mimercadolibre.exception.UnfixableException;
 import com.nbempire.mimercadolibre.service.UserService;
