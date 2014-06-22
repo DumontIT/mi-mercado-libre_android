@@ -43,6 +43,7 @@ import com.nbempire.mimercadolibre.service.SiteService;
 import com.nbempire.mimercadolibre.service.impl.ProductServiceImpl;
 import com.nbempire.mimercadolibre.service.impl.SiteServiceImpl;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 
@@ -325,7 +326,7 @@ public class HomeActivity extends BaseActionBarActivity implements ActionBar.Tab
         }
     }
 
-    private void updateViewsVisibility(final int visibility, View[] views) {
+    private static void updateViewsVisibility(final int visibility, View[] views) {
         for (View eachView : views) {
             eachView.setVisibility(visibility);
         }
@@ -347,6 +348,8 @@ public class HomeActivity extends BaseActionBarActivity implements ActionBar.Tab
             updateViewsVisibility(View.INVISIBLE, new View[]{averagePrice, minimumPrice, maximumPrice, moneySymbol, saveQueryButton, categoryLabel});
 
             String currentSite = sharedPreferences.getString(MainKeys.Keys.CURRENT_COUNTRY, MainKeys.DEFAULT_COUNTRY_ID);
+
+            //  TODO : Functionality : Check if this product already exists in stored ones and search again only if it has been a long time since the last query
             new FindProductAsyncTask().execute(currentSite, query.getText().toString());
         }
     }
@@ -386,21 +389,44 @@ public class HomeActivity extends BaseActionBarActivity implements ActionBar.Tab
                 Toast.makeText(averagePrice.getContext(), R.string.error_generic, Toast.LENGTH_SHORT).show();
             } else {
                 product = result;
-                moneySymbol.setText(
-                        sharedPreferences.getString(MainKeys.Keys.CURRENCY_ID_PREFFIX + product.getCurrencyId(), MainKeys.DEFAULT_CURRENCY_SYMBOL));
 
-                if (product.getCategory() != null) {
-                    categoryLabel.setText(String.format("%s %s", getText(R.string.category), product.getCategory().getName()));
-                }
-                averagePrice.setText(String.valueOf(product.getAveragePrice()));
-                minimumPrice.setText(String.valueOf(product.getMinimumPrice()));
-                maximumPrice.setText(String.valueOf(product.getMaximumPrice()));
-
-                updateViewsVisibility(View.VISIBLE,
-                                      new View[]{averagePrice, minimumPrice, maximumPrice, moneySymbol, saveQueryButton, categoryLabel});
+                updateAveragePriceFragment(averagePrice.getContext(), product, false);
 
                 productService.add(sharedPreferences, product);
             }
+        }
+    }
+
+    private static void updateAveragePriceFragment(Context context, Product product, boolean isStored) {
+        moneySymbol.setText(
+                sharedPreferences.getString(MainKeys.Keys.CURRENCY_ID_PREFFIX + product.getCurrencyId(), MainKeys.DEFAULT_CURRENCY_SYMBOL));
+
+        if (product.getCategory() != null) {
+            categoryLabel.setText(String.format("%s %s", context.getText(R.string.category), product.getCategory().getName()));
+        }
+        averagePrice.setText(String.valueOf(product.getAveragePrice()));
+        minimumPrice.setText(String.valueOf(product.getMinimumPrice()));
+        maximumPrice.setText(String.valueOf(product.getMaximumPrice()));
+
+        List<View> viewsToShow = new ArrayList<View>();
+        viewsToShow.add(averagePrice);
+        viewsToShow.add(minimumPrice);
+        viewsToShow.add(maximumPrice);
+        viewsToShow.add(moneySymbol);
+        viewsToShow.add(categoryLabel);
+
+        List<View> viewsToHide = new ArrayList<View>();
+        if (isStored) {
+            query.setText(product.getQuery());
+            viewsToHide.add(saveQueryButton);
+        } else {
+            viewsToShow.add(saveQueryButton);
+        }
+
+        updateViewsVisibility(View.VISIBLE, viewsToShow.toArray(new View[viewsToShow.size()]));
+
+        if (!viewsToHide.isEmpty()) {
+            updateViewsVisibility(View.INVISIBLE, viewsToHide.toArray(new View[viewsToHide.size()]));
         }
     }
 
@@ -452,6 +478,7 @@ public class HomeActivity extends BaseActionBarActivity implements ActionBar.Tab
                 @Override
                 public void onClick(View v) {
                     Log.d(TAG, "Selected saved product: " + product.getQuery());
+                    updateAveragePriceFragment(v.getContext(), product, true);
                 }
             });
 
