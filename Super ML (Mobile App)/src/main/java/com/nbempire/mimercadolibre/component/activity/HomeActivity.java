@@ -92,6 +92,8 @@ public class HomeActivity extends BaseActionBarActivity implements ActionBar.Tab
 
     private static Button saveQueryButton;
 
+    private static MyQueriesListLoader myQueriesListLoader;
+
     SharedPreferences.OnSharedPreferenceChangeListener onSharedPreferenceChangeListener = new SharedPreferences.OnSharedPreferenceChangeListener() {
         @Override
         public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String key) {
@@ -247,6 +249,11 @@ public class HomeActivity extends BaseActionBarActivity implements ActionBar.Tab
     public static class PlaceholderFragment extends Fragment {
 
         /**
+         * Tag for class' log.
+         */
+        private static final String TAG = "PlaceholderFragment";
+
+        /**
          * The fragment argument representing the section number for this fragment.
          */
         private static final String ARG_SECTION_NUMBER = "sectionNumber";
@@ -309,19 +316,26 @@ public class HomeActivity extends BaseActionBarActivity implements ActionBar.Tab
             getLoaderManager().initLoader(0, null, new LoaderManager.LoaderCallbacks<List<Product>>() {
                 @Override
                 public Loader<List<Product>> onCreateLoader(int id, Bundle args) {
-                    return new MyQueriesListLoader(container.getContext());
+                    Log.v(TAG, "==> onCreateLoader");
+
+                    myQueriesListLoader = new MyQueriesListLoader(container.getContext());
+                    return myQueriesListLoader;
                 }
 
                 @Override
                 public void onLoadFinished(Loader<List<Product>> loader, List<Product> data) {
+                    Log.v(TAG, "==> onLoadFinished");
                     // Set the new data in the adapter.
                     myQueriesAdapter.setData(data);
+                    Log.v(TAG, "<== onLoadFinished");
                 }
 
                 @Override
                 public void onLoaderReset(Loader<List<Product>> loader) {
+                    Log.v(TAG, "==> onLoaderReset");
                     // Clear the data in the adapter.
                     myQueriesAdapter.setData(null);
+                    Log.v(TAG, "<== onLoaderReset");
                 }
             });
         }
@@ -393,6 +407,7 @@ public class HomeActivity extends BaseActionBarActivity implements ActionBar.Tab
 
                 updateAveragePriceFragment(averagePrice.getContext(), product, false);
 
+                myQueriesListLoader.add(product);
                 productService.add(sharedPreferences, product);
             }
         }
@@ -526,6 +541,11 @@ public class HomeActivity extends BaseActionBarActivity implements ActionBar.Tab
      */
     public static class MyQueriesListLoader extends AsyncTaskLoader<List<Product>> {
 
+        /**
+         * Tag for class' log.
+         */
+        private static final String TAG = "MyQueriesListLoader";
+
         private List<Product> userQueries;
 
         private PackageIntentReceiver packageIntentReceiver;
@@ -540,6 +560,8 @@ public class HomeActivity extends BaseActionBarActivity implements ActionBar.Tab
          */
         @Override
         public List<Product> loadInBackground() {
+            Log.v(TAG, "==> loadInBackground");
+            Log.d(TAG, "Finding saved queries...");
             return productService.findAll(sharedPreferences);
         }
 
@@ -549,6 +571,7 @@ public class HomeActivity extends BaseActionBarActivity implements ActionBar.Tab
          */
         @Override
         public void deliverResult(List<Product> data) {
+            Log.v(TAG, "==> deliverResult, size: " + data.size());
             if (isReset()) {
                 // An async query came in while the loader is stopped.  We don't need the result.
                 if (data != null) {
@@ -575,6 +598,7 @@ public class HomeActivity extends BaseActionBarActivity implements ActionBar.Tab
          */
         @Override
         protected void onStartLoading() {
+            Log.v(TAG, "==> onStartLoading");
             if (userQueries != null) {
                 // If we currently have a result available, deliver it immediately.
                 deliverResult(userQueries);
@@ -589,6 +613,7 @@ public class HomeActivity extends BaseActionBarActivity implements ActionBar.Tab
                 // If the data has changed since the last time it was loaded or is not currently available, start a load.
                 forceLoad();
             }
+            Log.v(TAG, "<== onStartLoading");
         }
 
         /**
@@ -596,8 +621,10 @@ public class HomeActivity extends BaseActionBarActivity implements ActionBar.Tab
          */
         @Override
         protected void onStopLoading() {
+            Log.v(TAG, "==> onStopLoading");
             // Attempt to cancel the current load task if possible.
             cancelLoad();
+            Log.v(TAG, "<== onStopLoading");
         }
 
         /**
@@ -605,10 +632,12 @@ public class HomeActivity extends BaseActionBarActivity implements ActionBar.Tab
          */
         @Override
         public void onCanceled(List<Product> data) {
+            Log.v(TAG, "==> onCanceled");
             super.onCanceled(data);
 
             // At this point we can release the resources associated with 'data' if needed.
             onReleaseResources(data);
+            Log.v(TAG, "<== onCanceled");
         }
 
         /**
@@ -616,6 +645,7 @@ public class HomeActivity extends BaseActionBarActivity implements ActionBar.Tab
          */
         @Override
         protected void onReset() {
+            Log.v(TAG, "==> onReset");
             super.onReset();
 
             // Ensure the loader is stopped
@@ -626,13 +656,23 @@ public class HomeActivity extends BaseActionBarActivity implements ActionBar.Tab
                 onReleaseResources(userQueries);
                 userQueries = null;
             }
+            Log.v(TAG, "<== onReset");
         }
 
         /**
          * Helper function to take care of releasing resources associated with an actively loaded data set.
          */
         protected void onReleaseResources(List<Product> products) {
+            Log.v(TAG, "==> onReleaseResources");
             // For a simple List<> there is nothing to do.  For something like a Cursor, we would close it here.
+            Log.v(TAG, "<== onReleaseResources");
+        }
+
+        public void add(Product product) {
+            List<Product> newProducts = new ArrayList<Product>(userQueries);
+            newProducts.add(0, product);
+
+            deliverResult(newProducts);
         }
     }
 }
