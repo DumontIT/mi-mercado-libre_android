@@ -11,3 +11,14 @@ Before generating a new release
 * Update `MainKeys.API_HOST` constant field.
 * Update `ga_trackingId` property in `app_tracker.xml`.
 * Update `android.signingConfigs.release` properties in `build.gradle`.
+
+
+Coming soon!
+--
+
+Receive notifications about new articles that matches with a very specific set of rules like:
+
+
+* A new article that is the cheapest article for a specific product. E.g. Ipod nano/touch of 8/16/32gb.
+* A new article which price is lower/higher than the average price.
+* Every new article of that product.
