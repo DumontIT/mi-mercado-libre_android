@@ -9,6 +9,7 @@ import com.nbempire.mimercadolibre.exception.UnfixableException;
 import com.nbempire.mimercadolibre.service.ProductService;
 
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Collections;
 import java.util.List;
 
@@ -34,6 +35,8 @@ public class ProductServiceImpl implements ProductService {
         Product product = productDao.findByQuery(siteId, query);
         product.setQuery(query);
         product.setSiteId(siteId);
+        product.setDate(Calendar.getInstance().getTime());
+
         return product;
     }
 

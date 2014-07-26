@@ -42,6 +42,7 @@ import com.nbempire.mimercadolibre.service.impl.ProductServiceImpl;
 import com.nbempire.mimercadolibre.service.impl.SiteServiceImpl;
 
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Formatter;
 import java.util.List;
 import java.util.Locale;
@@ -653,9 +654,13 @@ public class HomeActivity extends BaseActionBarActivity implements ActionBar.Tab
             Product product = null;
             for (Product eachProduct : userQueries) {
 
+                Calendar before = Calendar.getInstance();
+                before.add(Calendar.MONTH, -1);
+
                 if (eachProduct.getSiteId() != null &&
                     eachProduct.getQuery().equalsIgnoreCase(userQuery) &&
-                    eachProduct.getSiteId().equalsIgnoreCase(currentSite)) {
+                    eachProduct.getSiteId().equalsIgnoreCase(currentSite) &&
+                    eachProduct.getDate().after(before.getTime())) {
 
                     product = eachProduct;
                     break;

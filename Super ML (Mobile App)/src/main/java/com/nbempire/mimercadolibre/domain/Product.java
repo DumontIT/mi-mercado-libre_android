@@ -1,6 +1,7 @@
 package com.nbempire.mimercadolibre.domain;
 
 import java.io.Serializable;
+import java.util.Date;
 import java.util.Set;
 
 /**
@@ -37,6 +38,8 @@ public class Product implements Serializable {
     private Set<Subscriptions> subscriptions;
 
     private String siteId;
+
+    private Date date;
 
     public Product() {
         this.appliedFilters = new AppliedFilter[]{};
@@ -113,5 +116,13 @@ public class Product implements Serializable {
 
     public void setSiteId(String siteId) {
         this.siteId = siteId;
+    }
+
+    public Date getDate() {
+        return date;
+    }
+
+    public void setDate(Date date) {
+        this.date = date;
     }
 }
