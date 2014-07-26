@@ -42,7 +42,8 @@ public class SiteServiceImpl implements SiteService {
             }
         }
 
-        if (sitesArray.length() == 0) {
+        boolean updateSites = sharedPreferences.getBoolean(MainKeys.Keys.SITES_FLAG, true);
+        if (updateSites || sitesArray.length() == 0) {
             List<Site> sites = siteDao.findSites();
 
             SharedPreferences.Editor sharedPreferencesEditor = sharedPreferences.edit();
@@ -63,6 +64,9 @@ public class SiteServiceImpl implements SiteService {
             }
 
             sharedPreferencesEditor.putString(MainKeys.Keys.SITES, sitesArray.toString());
+            if (updateSites) {
+                sharedPreferencesEditor.putBoolean(MainKeys.Keys.SITES_FLAG, false);
+            }
             sharedPreferencesEditor.commit();
         }
     }

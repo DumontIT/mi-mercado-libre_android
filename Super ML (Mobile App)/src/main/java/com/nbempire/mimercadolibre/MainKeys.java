@@ -32,6 +32,8 @@ public class MainKeys {
         public static final String PRODUCT = "product";
 
         public static final String SAVED_QUERIES = "savedQueries";
+
+        public static final String SITES_FLAG = "sitesFlag";
     }
 
     public class ServerAuthentication {
