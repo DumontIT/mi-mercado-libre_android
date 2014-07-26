@@ -26,5 +26,6 @@
     <string name="subscribing">Suscribiendo!</string>
     <string name="subscribed">Te has suscripto correctamente</string>
     <string name="cant_subscribe">No se pudo realizar la suscripcion</string>
+    <string name="this_is_a_stored_search">Este resultado es el que ya has visto en una búsqueda anterior</string>
 
 </resources>

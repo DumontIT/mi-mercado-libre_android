@@ -36,6 +36,8 @@ public class Product implements Serializable {
 
     private Set<Subscriptions> subscriptions;
 
+    private String siteId;
+
     public Product() {
         this.appliedFilters = new AppliedFilter[]{};
         this.availableFilters = new AvailableFilter[]{};
@@ -103,5 +105,13 @@ public class Product implements Serializable {
 
     public void setSubscriptions(Set<Subscriptions> subscriptions) {
         this.subscriptions = subscriptions;
+    }
+
+    public String getSiteId() {
+        return siteId;
+    }
+
+    public void setSiteId(String siteId) {
+        this.siteId = siteId;
     }
 }

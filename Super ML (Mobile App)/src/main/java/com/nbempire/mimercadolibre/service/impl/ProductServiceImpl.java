@@ -33,6 +33,7 @@ public class ProductServiceImpl implements ProductService {
     public Product findByQuery(String siteId, String query) throws UnfixableException {
         Product product = productDao.findByQuery(siteId, query);
         product.setQuery(query);
+        product.setSiteId(siteId);
         return product;
     }
 

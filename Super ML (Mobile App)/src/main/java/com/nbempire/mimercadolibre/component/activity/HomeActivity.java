@@ -1,9 +1,7 @@
 package com.nbempire.mimercadolibre.component.activity;
 
-import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
-import android.content.IntentFilter;
 import android.content.SharedPreferences;
 import android.content.res.Resources;
 import android.net.ConnectivityManager;
@@ -351,21 +349,31 @@ public class HomeActivity extends BaseActionBarActivity implements ActionBar.Tab
         Log.d(TAG, "View average price button pressed");
         Log.i(TAG, "Searching product: " + query.getText());
 
-        tracker.send(new HitBuilders.EventBuilder()
-                             .setCategory("search")
-                             .setAction("averagePrice")
-                             .setLabel(query.getText().toString())
-                             .build());
+        String userQuery = query.getText().toString();
 
-        if (query.getText().toString().equals("")) {
+        if (userQuery.equals("")) {
             Toast.makeText(this, R.string.average_price_must_enter_query, Toast.LENGTH_SHORT).show();
         } else {
-            updateViewsVisibility(View.INVISIBLE, new View[]{averagePrice, minimumPrice, maximumPrice, moneySymbol, saveQueryButton, categoryLabel});
-
             String currentSite = sharedPreferences.getString(MainKeys.Keys.CURRENT_COUNTRY, MainKeys.DEFAULT_COUNTRY_ID);
 
-            //  TODO : Functionality : Check if this product already exists in stored ones and search again only if it has been a long time since the last query
-            new FindProductAsyncTask().execute(currentSite, query.getText().toString());
+            Product storedProduct = myQueriesListLoader.contains(currentSite, userQuery);
+            if (storedProduct != null) {
+                Toast.makeText(this, R.string.this_is_a_stored_search, Toast.LENGTH_SHORT).show();
+
+                updateAveragePriceFragment(this, storedProduct, true);
+            } else {
+                updateViewsVisibility(View.INVISIBLE,
+                                      new View[]{averagePrice, minimumPrice, maximumPrice, moneySymbol, saveQueryButton, categoryLabel});
+
+                //  TODO : Functionality : Check if this product already exists in stored ones and search again only if it has been a long time since the last query
+                new FindProductAsyncTask().execute(currentSite, userQuery);
+            }
+
+            tracker.send(new HitBuilders.EventBuilder()
+                                 .setCategory("search")
+                                 .setAction("averagePrice")
+                                 .setLabel(userQuery)
+                                 .build());
         }
     }
 
@@ -510,34 +518,6 @@ public class HomeActivity extends BaseActionBarActivity implements ActionBar.Tab
     }
 
     /**
-     * Helper class to look for interesting changes to the installed apps so that the loader can be updated.
-     */
-    public static class PackageIntentReceiver extends BroadcastReceiver {
-
-        final MyQueriesListLoader mLoader;
-
-        public PackageIntentReceiver(MyQueriesListLoader loader) {
-            mLoader = loader;
-            IntentFilter filter = new IntentFilter(Intent.ACTION_PACKAGE_ADDED);
-            filter.addAction(Intent.ACTION_PACKAGE_REMOVED);
-            filter.addAction(Intent.ACTION_PACKAGE_CHANGED);
-            filter.addDataScheme("package");
-            mLoader.getContext().registerReceiver(this, filter);
-            // Register for events related to sdcard installation.
-            IntentFilter sdFilter = new IntentFilter();
-            sdFilter.addAction(Intent.ACTION_EXTERNAL_APPLICATIONS_AVAILABLE);
-            sdFilter.addAction(Intent.ACTION_EXTERNAL_APPLICATIONS_UNAVAILABLE);
-            mLoader.getContext().registerReceiver(this, sdFilter);
-        }
-
-        @Override
-        public void onReceive(Context context, Intent intent) {
-            // Tell the loader about the change.
-            mLoader.onContentChanged();
-        }
-    }
-
-    /**
      * A custom Loader that loads all stored products.
      */
     public static class MyQueriesListLoader extends AsyncTaskLoader<List<Product>> {
@@ -548,8 +528,6 @@ public class HomeActivity extends BaseActionBarActivity implements ActionBar.Tab
         private static final String TAG = "MyQueriesListLoader";
 
         private List<Product> userQueries;
-
-        private PackageIntentReceiver packageIntentReceiver;
 
         public MyQueriesListLoader(Context context) {
             super(context);
@@ -603,11 +581,6 @@ public class HomeActivity extends BaseActionBarActivity implements ActionBar.Tab
             if (userQueries != null) {
                 // If we currently have a result available, deliver it immediately.
                 deliverResult(userQueries);
-            }
-
-            // Start watching for changes in the app data.
-            if (packageIntentReceiver == null) {
-                packageIntentReceiver = new PackageIntentReceiver(this);
             }
 
             if (takeContentChanged() || userQueries == null) {
@@ -674,6 +647,22 @@ public class HomeActivity extends BaseActionBarActivity implements ActionBar.Tab
             newProducts.add(0, product);
 
             deliverResult(newProducts);
+        }
+
+        public Product contains(String currentSite, String userQuery) {
+            Product product = null;
+            for (Product eachProduct : userQueries) {
+
+                if (eachProduct.getSiteId() != null &&
+                    eachProduct.getQuery().equalsIgnoreCase(userQuery) &&
+                    eachProduct.getSiteId().equalsIgnoreCase(currentSite)) {
+
+                    product = eachProduct;
+                    break;
+                }
+            }
+
+            return product;
         }
     }
 }

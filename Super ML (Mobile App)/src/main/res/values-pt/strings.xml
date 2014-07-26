@@ -27,5 +27,6 @@
     <string name="subscribing">Subscrição!</string>
     <string name="subscribed">Você se inscreveu com sucesso</string>
     <string name="cant_subscribe">Falha ao executar a assinatura</string>
+    <string name="this_is_a_stored_search">Este resultado é o que você viu em uma pesquisa anterior</string>
 
 </resources>
