@@ -7,6 +7,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.CheckBox;
 import android.widget.Toast;
+import com.google.android.gms.analytics.HitBuilders;
 import com.nbempire.mimercadolibre.MainKeys;
 import com.nbempire.mimercadolibre.R;
 import com.nbempire.mimercadolibre.domain.Product;
@@ -94,7 +95,13 @@ public class ChooseSubscriptionActivity extends BaseActionBarActivity {
             try {
                 result = userService.updateSubscriptions(params[0]);
             } catch (UnfixableException unfixableException) {
-                Log.e(TAG, "An error occurred while trying to subscribe notifications for a product: " + unfixableException.getMessage());
+                String message = "An error occurred while trying to subscribe notifications for a product: " + unfixableException.getMessage();
+                Log.e(TAG, message);
+                tracker.send(new HitBuilders.EventBuilder()
+                                     .setCategory("exception")
+                                     .setAction("updateSubscriptions")
+                                     .setLabel(message)
+                                     .build());
             }
 
             return result;

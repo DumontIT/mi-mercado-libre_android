@@ -401,7 +401,13 @@ public class HomeActivity extends BaseActionBarActivity implements ActionBar.Tab
             try {
                 result = productService.findByQuery(params[0], params[1]);
             } catch (UnfixableException unfixableException) {
-                Log.e(TAG, "An error occurred while finding a product and the search could not be finished: " + unfixableException.getMessage());
+                String message = "An error occurred while finding a product and the search could not be finished: " + unfixableException.getMessage();
+                Log.e(TAG, message);
+                tracker.send(new HitBuilders.EventBuilder()
+                                     .setCategory("exception")
+                                     .setAction("findByQuery")
+                                     .setLabel(message)
+                                     .build());
             }
 
             return result;
