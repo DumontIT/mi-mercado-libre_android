@@ -9,8 +9,6 @@ import com.nbempire.mimercadolibre.R;
 import java.util.HashMap;
 
 /**
- * TODO : Javadoc for
- * <p/>
  * Created on 18/06/14, at 01:15.
  *
  * @author Nahuel Barrios <barrios.nahuel@gmail.com>.
