@@ -22,10 +22,6 @@ public class MiMercadoLibreApplication extends Application {
 
     HashMap<TrackerName, Tracker> mTrackers = new HashMap<TrackerName, Tracker>();
 
-    public MiMercadoLibreApplication() {
-        super();
-    }
-
     public synchronized Tracker getTracker(TrackerName trackerId) {
         if (!mTrackers.containsKey(trackerId)) {
             Tracker tracker = GoogleAnalytics.getInstance(this).newTracker(R.xml.app_tracker);
