@@ -51,5 +51,6 @@ dependencies {
     compile 'com.google.code.gson:gson:2.3'
     compile 'com.google.android.gms:play-services:7.5.0'
 
+    // Stetho: Go to: "chrome://inspect"
     debugCompile 'com.facebook.stetho:stetho:1.1.1'
 }
