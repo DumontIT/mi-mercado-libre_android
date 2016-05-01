@@ -1,0 +1,103 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:paddingLeft="@dimen/activity_horizontal_margin"
+    android:paddingRight="@dimen/activity_horizontal_margin"
+    android:paddingTop="@dimen/activity_vertical_margin"
+    android:paddingBottom="@dimen/activity_vertical_margin"
+    tools:context="com.nbempire.mimercadolibre.component.activity.HomeActivity$PlaceholderFragment">
+
+    <EditText
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/homeSearchQuery"
+        android:hint="@string/query_label"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentLeft="true" />
+
+    <Button
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/search_button_label"
+        android:id="@+id/homeSearchButton"
+        android:layout_gravity="center_horizontal"
+        android:onClick="searchAveragePrice"
+        android:layout_below="@+id/homeSearchQuery"
+        android:layout_alignParentLeft="true" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceMedium"
+        android:id="@+id/homeCategoryLabel"
+        android:layout_below="@+id/homeSearchButton"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:visibility="invisible" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceLarge"
+        android:id="@+id/homeAveragePrice"
+        android:layout_gravity="center_horizontal"
+        android:visibility="invisible"
+        android:textSize="@dimen/average_price_size"
+        android:singleLine="true"
+        android:layout_centerVertical="true"
+        android:layout_centerHorizontal="true" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceLarge"
+        android:id="@+id/homeMinimumPrice"
+        android:longClickable="true"
+        android:textColor="#ff99cc00"
+        android:layout_below="@+id/homeAveragePrice"
+        android:layout_centerHorizontal="true"
+        android:visibility="invisible" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceMedium"
+        android:id="@+id/homeMaximumPrice"
+        android:textColor="#ffff4444"
+        android:layout_above="@+id/homeAveragePrice"
+        android:layout_centerHorizontal="true"
+        android:visibility="invisible" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/moneySymbol"
+        android:id="@+id/homeMoneySymbol"
+        android:textSize="@dimen/money_symbol_size"
+        android:visibility="invisible"
+        android:layout_below="@+id/homeCategoryLabel"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true" />
+
+    <Button
+        style="?android:attr/buttonStyleSmall"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/save"
+        android:id="@+id/saveQueryButton"
+        android:onClick="saveQuery"
+        android:visibility="invisible"
+        android:layout_above="@+id/homeCountryLabel"
+        android:layout_alignRight="@+id/homeSearchButton"
+        android:layout_alignEnd="@+id/homeSearchButton" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceSmall"
+        android:id="@+id/homeCountryLabel"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentEnd="true" />
+</RelativeLayout>
