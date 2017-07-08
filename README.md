@@ -9,6 +9,7 @@ Native Android app for those Mercado Libre's buyers/sellers that want to have an
 [![Semver](http://img.shields.io/SemVer/2.0.0.png)](http://semver.org/spec/v2.0.0.html)
 [![stable](https://img.shields.io/badge/stability-unstable-yellow.svg)](https://nodejs.org/api/documentation.html#documentation_stability_index)
 
+Server: : https://github.com/barriosnahuel/mi-mercado-libre_server
 
 ## Repo usage
 
